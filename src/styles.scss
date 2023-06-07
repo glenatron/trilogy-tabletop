@@ -1,1 +1,171 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --dark-leather: rgba( 63, 88, 31,1);	// Main Primary color */
+  --pale-leather: rgba(125,155, 85,1);
+  --mid-leather: rgba( 84,108, 53,1);
+  --very-dark-leather: rgba( 41, 62, 14,1);
+
+  --very-dark-pine: rgba( 25, 70, 42,1);	// Main Secondary color (1) */
+  --mid-pine: rgba( 67,124, 88,1);
+  --dark-pine: rgba( 42, 86, 58,1);
+
+  --deep-gold: rgba( 89, 95, 33,1);	// Main Secondary color (2) */
+  --gold: rgba(160,167, 91,1);
+}
+
+body {
+    font-family: constantia;
+
+}
+.game-footer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+button {
+    padding: 0.5em;
+    margin-left: 0.5em;
+    background-color: var(--dark-leather);
+    border: var(--gold);
+    font-size: 1.2em;
+    font-weight: bold;
+    color:  var(--gold);
+}
+input {
+    padding: 0.5em;
+    font-size: 1.2em;
+    font-family: monaco, monospace;
+}
+label {
+    padding-right: 1em;
+}
+textarea {
+    margin: 1em;
+    width: 35em;
+    font-size: 1.2em;
+    font-family: monaco, monospace;
+}
+.component-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+}
+button.btn-toggle {
+   font-size: 0.8em;
+   border-radius: 1.5em;
+}
+.gm-menu {
+  float: right;
+  margin-top: -0.8em;
+}
+.gm-menu .menu-open {
+  display: flex;
+  flex-direction: row-reverse;
+}
+.gm-menu .menu-items {
+    border: 1px solid black;
+    background-color: white;
+    padding: 0.5em;
+    list-style-type: none;
+    margin-top: 0em;
+}
+.gm-menu li.menu-item {
+    margin-bottom: 0.5em;
+}
+.gm-menu .upload-container {
+    background-color: rgba(25, 25, 25, 0.8);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    bottom: 0;
+}
+.gm-menu .upload-inner {
+    border: 1px solid black;
+    background-color: white;
+    position: relative;
+    width: 25%;
+    margin-top: 25%;
+    margin-left: 30%;
+}
+.gm-menu .upload-inner h3 {
+    background-color: var(--pale-leather);
+    color: black;
+    width: 98%;
+    margin-top: 0;
+    padding-top: 0.5em;
+    padding-left: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+.character-sheet {
+    border: 1px solid var(--mid-pine);
+}
+.character-sheet-title {
+  background-color: var(--very-dark-leather);
+  padding-left: 1em;
+  color: gold;
+}
+.character-sheet-content {
+    padding: 0.5em;
+}
+.arc-container {
+    margin-top: -1em;
+    font-family: arial;
+    font-size: 0.8em;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+}
+.xp-triggers {
+    list-style-type: none;
+}
+.stat button {
+   font-size: 0.7em;   
+}
+.stats-list {
+    display: flex; 
+    flex-direction: row;
+    list-style-type: none;
+}
+.stat-control-set {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+}
+.stat-control-list {
+    list-style-type: none;
+}
+.stat-value-row {
+    display: flex;
+    flex-direction: row;
+}
+.stat-controls {
+    display: flex;
+    flex-direction: column;
+}
+.stat-controls label {
+    font-size: 0.7em;
+}
+ul .harm-track {
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+}
+.harm-track li {
+    width: 30%;
+}
+.harm-level {
+    display: flex;
+    flex-direction: row;
+}
+.update-harm {
+    height: 100%;
+}
+.harm-level textarea {
+    width: 80%;
+}
+.update-harm {
+    width: 20%;
+}
+

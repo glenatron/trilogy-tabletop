@@ -1,0 +1,45 @@
+<div class="dice-roller" >
+    <h3>{{title()}}</h3>
+    <ul class="dice-list" >
+	<li class="list-dice" *ngFor="let die of dice;let i= index" >
+	    <div [class]="{ 'dice-box': true, 'rolling': die.rolling }" >
+		<span class="dice-value">{{die.currentValue | async}}</span>
+	    </div>
+	</li>
+	<li class="controls" >
+	    <ul class="modifier" >
+		<li [class]="{'advantage': true, 'highlight': hasAdvantage() }" 
+		    (click)="setAdvantage()">
+		    Advantage
+		</li>
+                <li class="modifier-literal">
+		    <button class="btn decrease-button" (click)="decreaseLiteral()" >-</button>
+		    <span class="modifier-value">{{modifierLiteral}}</span>
+		    <button class="btn increase-button" (click)="increaseLiteral()" >+</button>
+		</li>
+		<li [class]="{'disadvantage': true, 'highlight': hasDisadvantage() }" 
+		    (click)="setDisadvantage()">
+		    Disadvantage
+		</li>
+	    </ul>
+	</li>
+	<li *ngIf="!rolled && !rolling"
+	    class="roll-button" >
+	    <button type="button" class="btn btn-roll" (click)="triggerRoll()" >
+		Roll!
+	    </button>
+	</li>
+
+	<li *ngIf="rolled && !rolling"
+	    class="roll-button" >
+	    <button type="button"  (click)="triggerRoll()" class="btn btn-roll" >
+		Reroll
+	    </button>
+	</li>
+    </ul>
+    <div *ngIf="rolled"
+		class="results">
+	Result: {{pool.score()}}
+	<span class="pool-analysis" >( {{pool.analysis() }} )</span>
+    </div>
+</div>

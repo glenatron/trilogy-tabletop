@@ -1,0 +1,9 @@
+<div content="view" >
+    <div content="find-player" *ngIf="!found">
+	<input type="text" name="invite_code" id="invite-code" [(ngModel)]="inviteCode" />
+	<button (click)="startPlayer()" >Start</button>
+    </div>
+    <div content="show-player" *ngIf="found" >
+	<player id="player.id"></player>
+    </div>
+</div>

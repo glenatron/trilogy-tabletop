@@ -1,0 +1,21 @@
+<div class="npc-list-container" >
+    <div class="component-header">
+    <h3>NPCs</h3>
+    
+    <span class="toggle" >
+	<button (click)="toggleOpen()" class="btn-toggle btn-toggle-open" *ngIf="!open" ><</button>
+	<button (click)="toggleOpen()" class="btn-toggle btn-toggle-closed" *ngIf="open" >v</button>
+    </span>
+    </div>
+    <ul class="npc-list" *ngIf="open" >
+	<li class="npc" *ngFor="let npc of liveNPCs | async" >
+	    <npc [id]="npc.id" ></npc>
+	</li>
+	<li class="create" *ngIf="creating" >
+	    <npc></npc>
+	</li>
+	<li class="npc" *ngIf="!creating">
+	    <button (click)="createNPC()" >Create NPC</button>
+	</li>
+    </ul>
+</div>

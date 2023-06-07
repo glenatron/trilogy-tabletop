@@ -1,0 +1,65 @@
+<div class="character-sheet" *ngIf="character != null">
+    <div class="character-sheet-title component-header">
+	<h2>{{character.name}}</h2>
+	<span class="toggle" >
+	    <button (click)="toggleOpen()" class="btn-toggle btn-toggle-open" *ngIf="!open" ><</button>
+	    <button (click)="toggleOpen()" class="btn-toggle btn-toggle-closed" *ngIf="open" >v</button>
+	</span>
+    </div>
+    <div class="character-sheet-content" *ngIf="open" >
+	<!-- arc / xp -->
+	<div class="character-top" >
+	    <arc [arc]="character.currentArc()" ></arc>
+	    <div class="xp counter" >
+		<counter [counter]="character.xp.toStore()" (value)="updateXPValue($event)" ></counter>
+	    </div>
+	</div>
+	<ul class="stats-list" >
+	    <li *ngFor="let st of character.stats" >
+		<stat [statistic]="st" (roll)="rollStat($event)" (updated)="statUpdated(st)"></stat>
+	    </li>
+	</ul>
+
+	<div class="stress-track" >
+	    <counter [counter]="character.stress.toStore()" (updated)="updateStress($event)" (value)="updateStressValue($event)" ></counter> 
+	</div>
+	<div class="character-harm-track" >
+	    <harm-track [track]="character.harm" (updated)="updateHarm($event)" (cleared)="clearHarm($event)" ></harm-track>
+	</div>
+	<div class="wealth-track" >
+	    <counter [counter]="character.wealth.toStore()" (updated)="updateWealth($event)" (value)="updateWealthValue($event)" ></counter>
+	</div>
+	<div class="background character-history-block" >
+	    <h4>Background: {{character.background.name}}</h4>
+	    <p *ngIf="editing">
+		<textarea id="character-background" name="character_background" [(ngModel)]="character.background" ></textarea>
+	    </p>
+	    <p *ngIf="!editing">
+		{{character.background.description}}
+	    </p>
+	</div>
+	<div class="complication character-history-block" >
+	    <h4>Complication</h4>
+	    <p *ngIf="editing">
+		<textarea id="complication-text" name="complication_text" [(ngModel)]="character.background" ></textarea>
+	    </p>
+	    <p *ngIf="!editing">
+		{{character.complication}}
+	    </p>
+	</div>
+	
+	<div class="equipment-wrapper" >
+	    <armour [armourSet]="character.armour" ></armour>
+	    <character-equipment [equipment]="character.equipment" ></character-equipment>
+	</div>
+	<div class="moves" >
+	    <h3 class="moves-header">Moves</h3>
+	    <ul class="move-list" >
+		<li *ngFor="let mv of character.moves" >
+		    <move [moveSummary]="mv.summary" (roll)="rollMove($event)"></move>
+		</li>
+	    </ul>
+	</div>
+    </div>
+    
+</div>

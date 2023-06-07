@@ -1,0 +1,24 @@
+<div class="player" >
+    <div class="player-name component-header" >
+	<h3 *ngIf="!editing">{{playerSummary.name}}</h3>
+	<span class="toggle" *ngIf="!editing" >
+	    <button (click)="toggleOpen()" class="btn-toggle btn-toggle-open" *ngIf="!open" ><</button>
+	    <button (click)="toggleOpen()" class="btn-toggle btn-toggle-closed" *ngIf="open" >v</button>
+	</span>
+    </div>
+    <div class="player-details" *ngIf="open">
+	<p *ngIf="gmView">Invite code: {{player!.inviteCode}} (link: <span class="link-url">{{getLink()}}</span> ) </p>
+	<ul class="player-characters">
+	    <li class="activeCharacter" *ngIf="player!.activeCharacterId != ''">
+		<character [id]="player!.activeCharacterId"></character>
+	    </li>
+	    <li class="character" *ngFor="let char of characters | async">
+		<character [id]="char.id"></character>
+	    </li>
+	    <li class="new-character" >
+		<button (click)="createCharacter()" *ngIf="!editing" >New Character</button>
+		<character-form [playerId]="id" (done)="characterCreated($event)" *ngIf="editing" ></character-form>
+	    </li>
+	</ul>
+    </div>
+</div>

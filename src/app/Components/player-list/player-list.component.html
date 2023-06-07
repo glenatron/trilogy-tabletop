@@ -1,0 +1,28 @@
+
+<div class="player-list-container" >
+    <div class="component-header" >
+	<h2>Players</h2>
+	<span class="toggle" >
+	    <button (click)="toggleOpen()" class="btn-toggle btn-toggle-open" *ngIf="!open" ><</button>
+	    <button (click)="toggleOpen()" class="btn-toggle btn-toggle-closed" *ngIf="open" >v</button>
+	</span> 
+    </div>
+	<ul class="player-list" *ngIf="open" >
+	    <li *ngFor="let player of players | async">
+		<player [id]="player.id" [gmView]="true" ></player>
+	    </li>
+	    <li class="open-new-player" >
+		<button (click)="openAddition()" *ngIf="!add">New Player</button>
+		<div class="addition-form" *ngIf="add">
+		    <p><label for="player-name" >Name:</label>
+			<input type="text" name="player_name" id="player-name" [(ngModel)]="playerSummary.name" >
+		    </p>
+		    <p>
+			<button (click)="cancelAddition()" >Cancel</button>
+			<button (click)="saveAddition()" >Save</button>
+		    </p>
+		</div>
+	    </li>
+	</ul>
+	
+    </div>

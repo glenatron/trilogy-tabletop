@@ -1,0 +1,35 @@
+<div class="stat">
+    <div class="stat-name" >{{statistic.name}}</div>
+    <div class="stat-control-set" >
+	<div class="stat-value-row" >
+	    <span class="stat-value">
+		{{getStatisticValue()}}
+            </span>
+	    <div class="stat-controls" >
+		<button class="stat-down" (click)="statDecrease()" >-</button>
+		<button class="stat-up" (click)="statIncrease()" >+</button>
+	    </div>
+	</div>
+	<div class="stat-roller">
+	    <ul class="stat-control-list">
+		<li>
+		    <input type="checkBox" [(ngModel)]="advantageToggle.advantage"
+			   name="{{statistic.name}}-advantage" id="{{statistic.name}}_advantage"
+			   (click)="toggleAdvantage()"
+		    >
+		    <label for="{{statistic.name}}_advantage">Advantage</label>
+		</li>
+		<li>
+		    <button type="button" class="btn btn-stat-advantage">Roll</button>
+		</li>
+		<li>
+		    <input type="checkBox" [(ngModel)]="advantageToggle.advantage"
+			   name="{{statistic.name}}-disadvantage" id="{{statistic.name}}_disadvantage"
+			   (click)="toggleDisadvantage()"
+		    >
+		    <label for="{{statistic.name}}_disadvantage">Disadvantage</label>
+		</li>
+	    </ul>
+	</div>
+    </div>
+</div>

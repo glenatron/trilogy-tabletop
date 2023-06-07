@@ -1,0 +1,97 @@
+
+ul.dice-list {
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+}
+ul.dice-list li {
+    height: 4em;
+    padding: 0.5em;
+}
+div.dice-box {
+    width: 3em;
+    height: 3em;
+    background-color: #000000;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 1.5em;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-direction: row;
+}
+li.list-dice:nth-of-type(1) .dice-box {
+    background-color: var(--deep-gold);
+}
+li.list-dice:nth-of-type(2) .dice-box {
+   background-color: var(--mid-pine);
+}
+li.list-dice:nth-of-type(3) .dice-box {
+    background-color: var(--pale-leather);
+}
+li.list-dice:nth-of-type(4) .dice-box {
+    background-color: var(--very-dark-leather);
+}
+span.dice-value {
+    padding-top: 0.8em;
+}
+div.rolling {
+    animation: rotate 0.5s linear infinite;
+}
+@keyframes rotate{
+  0% {
+    transform: rotate(0deg)
+  }
+  40% {
+    transform: rotate(90deg)
+  }
+  60% {
+    transform: rotate(270deg)
+  }
+  100% {
+    transform: rotate(360deg)
+  }
+}
+ul.modifier {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.6em;
+    height: 1em;
+    padding-right: 2em;
+}
+ul.modifier li.modifier-literal {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    margin-top: -1em;
+}
+span.modifier-value {
+    font-size: 3.5em;
+    padding-left: 1em;
+    padding-right: 1em;
+    margin-top: -0.4em;
+}
+li.modifier-literal .btn {
+    padding: 0em 0.25em 0em 0.25em;
+    font-size: 1em;
+    font-weight: bold;
+    border-radius: 1em;
+    height: 1.5em;
+}
+li.advantage {
+    z-index: 1;
+}
+li.disadvantage {
+    margin-top: -1em;
+}
+li.highlight {
+    background-color: var(--very-dark-leather);
+    color: white;
+}
+div.results {
+    color: var(--pale-leather);
+}
+

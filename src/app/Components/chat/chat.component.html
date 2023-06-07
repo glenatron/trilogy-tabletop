@@ -1,0 +1,28 @@
+<div class="chat" >
+    <h3>Messages</h3>
+    <div class="chat-wrapper" >
+    <ul class="chat-list" >
+	<li *ngFor="let chat of gameService.chat | async">
+	    <div *ngIf="chat.messageType == ChatMessageType.System"
+		 class="chat-system"
+	    >
+		{{chat.message}}
+	    </div>
+	    <div *ngIf="chat.messageType == ChatMessageType.Roll"
+	         class="chat-roll">
+		<strong>{{chat.playerName}}</strong> {{chat.message}}
+	    </div>
+	    <div *ngIf="chat.messageType == ChatMessageType.Chat"
+		 class="chat-person" >
+		<strong>{{chat.playerName}}</strong> {{chat.message}}
+	    </div>
+	</li>
+    </ul>
+    </div>
+    <div class="chat-say">
+	<textarea [(ngModel)]="latestMessage"
+		  class="chat-message-box"
+	></textarea>
+	<button class="btn btn-say" (click)="saySomething()">Say</button>
+    </div>
+</div>

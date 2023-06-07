@@ -1,0 +1,55 @@
+<ul [ngClass]="{ 'harm-track': true, 'mild-danger': inDanger(), 'severe-harm': inSevereHarm(), 'mortal-danger': inMortalDanger() }">
+    <li class="harm-level-1">
+	<h3 class="harm-title">Level 1</h3>
+	<div class="harm-level" *ngFor="let level of getHarmAtLevel(1)" >
+	    <div *ngIf="level.open">
+		<textarea [(ngModel)]="level.harm.value"  ></textarea>
+		<button class="btn update-harm" (click)="updateLevel(level.harm)">Update</button>
+	    </div>
+	    <div *ngIf="!level.harm.value" class="empty-harm">
+		<button class="btn update-harm" (click)="setUpdateLevel(1)"> + </button>
+	    </div>
+	</div>
+
+    </li>
+    <li class="harm-level-2">
+	<h3 class="harm-title">Level 2</h3>
+	<div class="harm-level" *ngFor="let level of getHarmAtLevel(2)" >
+	    <div *ngIf="level.open">
+		<textarea [(ngModel)]="level.harm.value"  ></textarea>
+		<button class="btn update-harm" (click)="updateLevel(level.harm)">Update</button>
+	    </div>
+	    <div *ngIf="!level.harm.value" class="empty-harm">
+		<button class="btn update-harm" (click)="setUpdateLevel(2)"> + </button>
+	    </div>
+	</div>
+
+    </li>
+    <li class="harm-level-3">
+	<h3 class="harm-title">Level 3</h3>
+	<div class="harm-level" *ngFor="let level of getHarmAtLevel(3)" >
+	    <div *ngIf="level.open">
+		<textarea [(ngModel)]="level.harm.value"  ></textarea>
+		<button class="btn update-harm" (click)="updateLevel(level.harm)">Update</button>
+	    </div>
+	    <div *ngIf="!level.harm.value" class="empty-harm">
+		<button class="btn update-harm" (click)="setUpdateLevel(3)"> + </button>
+	    </div>
+	</div>
+    </li>
+    <li class="harm-level-4" *ngIf="">
+	<h3 class="harm-title">Level 4</h3>
+	<div class="harm-level" *ngFor="let level of getHarmAtLevel(4)" >
+	    <div *ngIf="level.open" >
+		<textarea [(ngModel)]="level.harm.value"  ></textarea>
+		<button class="btn update-harm" (click)="updateLevel(level.harm)">Update</button>
+	    </div>
+	    <div *ngIf="!level.harm.value" class="empty-harm">
+		<button class="btn update-harm" (click)="setUpdateLevel(4)"> + </button>
+	    </div>
+	</div>
+
+    </li>
+    
+</ul>
+

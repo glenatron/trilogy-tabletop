@@ -1,0 +1,58 @@
+<div class="move" >
+    <div class="move-name">
+	<h3 class="move-name" *ngIf="!editing" >
+	    {{moveSummary.name}}
+	</h3>
+	<h3 class="move-name" *ngIf="editing">
+	    <input type="text" id="move-name" name="move_name" [(ngModel)]="moveSummary.name" />
+	</h3>
+	<span class="toggle" *ngIf="!editing" >
+	    <button (click)="toggleOpen()" class="btn btn-toggle-open" *ngIf="open" >v</button>
+	    <button (click)="toggleOpen()" class="btn btn-toggle-closed" *ngIf="!open" ><</button>
+	</span>
+    </div>
+    <div class="move-details" *ngIf="open">
+	<div class="move-summary" *ngIf="!editing">
+	    <p class="move-trigger"><em>{{moveSummary.trigger}}</em></p>
+	    <div class="move-stats" *ngIf="(0 < statsCount())" >
+		<select
+		  name="stat_roll"
+		  id="stat-roll"
+		  #selectStat
+		  [(ngModel)]="selectedStat"
+		  *ngIf="1 < statsCount()" >
+		    <option *ngFor="let stat of stats" value="{{stat}}">
+			{{stat}}
+		    </option>
+		</select>
+
+		<ul class="select-advantage" >
+		    <li>
+			<input type="checkbox"
+			       id="advantage-checkbox"
+			       name="advantage_checkbox"
+			       #advantageCheck
+			       (click)="takeAdvantage(advantageCheck.checked)" />
+			<label for="advantage-checkbox" >Advantage</label>
+		    </li>
+		    <li>
+			<input type="checkbox"
+			       id="disadvantage-checkbox"
+			       name="disadvantage_checkbox"
+			       #disadvantageCheck
+			       (click)="takeDisadvantage(disadvantageCheck.checked)" />
+			<label for="disadvantage-checkbox">Disadvantage</label>
+		    </li>
+		</ul>
+		<button class="btn btn-stat" (click)="rollStat()">
+		    Roll + {{selectedStat}}
+		</button>		    
+	    </div>
+	    <div class="move-fullSuccess" *ngIf="moveSummary.fullSuccess != ''"><span class="success-label">10+</span> <div [innerHtml]="moveSummary.fullSuccess | safeHtml"></div></div>
+	    <div class="move-intermediate" *ngIf="moveSummary.intermediate != ''"><span class="intermediate-label">7-9</span> <div [innerHtml]="moveSummary.intermediate | safeHtml"></div></div>
+	    <div class="move-failure" *ngIf="moveSummary.failure != ''"><span class="failure-label">6-</span><div [innerHtml]="moveSummary.failure | safeHtml"></div></div>
+            <div class="move-notes"><div [innerHtml]="moveSummary.notes | safeHtml"></div></div>
+	</div>
+
+    </div>
+</div>

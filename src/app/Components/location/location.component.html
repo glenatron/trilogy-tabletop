@@ -1,0 +1,30 @@
+<div class="location-card" >
+    <div class="location" >
+	<h2>New Location</h2>
+	<div class="form-group">
+	    <label for="name" >Name</label>
+	    <input type="text" class="form-control" id="name"
+		   required
+		   [(ngModel)]="location!.name" name="name" >
+	</div>
+
+	<div class="form-group">
+	    <label for="description" >Description</label>
+	    <textarea class="form-control" id="description"
+		      [(ngModel)]="location!.description" name="description" >
+            </textarea>
+	</div>
+	<div class="gm-card-section" *ngIf="gmView==true">
+	    <div class="form-group" >
+	    <label for="gmNotes" >GM Notes</label>
+	    <textarea class="form-control" id="gmNotes"
+		      [(ngModel)]="location!.GMNotes" name="gmNotes" >
+            </textarea>
+	    </div>
+	</div>
+	<div class="button-container">
+	    <button type="button" class="btn btn-success" (click)="saveLocation()">Save</button>
+	    <button type="button" class="btn btn-cancel" (click)="cancel()">Cancel</button>
+	</div>
+    </div>
+</div>

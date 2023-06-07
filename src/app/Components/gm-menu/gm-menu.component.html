@@ -1,0 +1,25 @@
+<div class="gm-menu" >
+    <div class="menu-open" >
+	<button class="btn" (click)="toggleMenu()">Menu</button>
+    </div>
+    <ul class="menu-items" *ngIf="open">
+	<li class="menu-item" *ngIf="gameExists" >
+	    <button class="btn" (click)="save()" >Save</button>
+	</li>
+	<li class="menu-item" >
+	    <button class="btn" (click)="showLoadMenu()" >Load</button>
+	</li>
+	<li class="menu-item" >
+	    <button class="btn" (click)="toggleMenu()" >Close</button>
+	</li>
+    </ul>
+    <div class="upload-container" *ngIf="openUpload && open" >
+	<div class="upload-inner" >
+	   <h3>Upload</h3>
+	   <input type="file" id="uploadContainer" (change)="loadFileDocument($event)" />
+	   <button class="btn"  (click)="hideLoadMenu()" >Cancel</button>
+	</div>
+    </div>
+</div>
+
+

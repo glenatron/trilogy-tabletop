@@ -1,0 +1,46 @@
+<div class="trilogy-game-view gm-view" >
+    <div class="gm-view-header" >GM View     <gm-menu></gm-menu></div>
+    <div class="game-loaded" *ngIf="gameExists | async">
+	    <h1>{{game.name}}</h1>
+	    <div class="game-layout" >
+	    <div class="player-list" >
+		<player-list></player-list>
+	    </div>
+	    <div class="current-scene" *ngIf="currentScene" >
+
+	    </div>
+	    <div class="gm-options" >
+	    <location-list [gmView]="true"
+		       *ngIf="locationListOpen"
+		       (showLocation)="showLocation($event)"
+		       (newLocation)="showLocation($event)"
+		></location-list>
+	    <location
+	      *ngIf="openLocation != null"
+	      [gmView]="true"
+	      [location]="openLocation"
+	      (created)="closeLocation()"></location>
+
+	    <npc-list></npc-list>
+	    </div>
+	    </div>
+	    <div class="game-footer" >
+		<dice [roll]="diceRoll | async" (justRolled)="notifyRoll($event)" ></dice>
+		<chat [playerId]="playerId" ></chat>
+	    </div>
+	</div>
+ 
+    <ng-container *ngIf="!(gameExists | async)">
+	<div class="trilogy-create-game" >
+	    <h1>Create Game</h1>
+	    <div class="game-form" >
+		<p><label for="nameContainer" >Game name:</label><input type="text" class="title-input" id="nameContainer" name="nameContainer" [(ngModel)]="game.name"  /></p>
+		<p><label for="gmNameContainer">Your name:</label><input type="text" class="title-input"
+									 id="gmNameContainer" name="gmNameContainer" [(ngModel)]="gmName" ></p>
+	    <p>
+		<button type="button" (click)="createGame()" >Create</button>
+	    </p>
+	  </div>
+	</div>
+    </ng-container>
+</div>

@@ -1,0 +1,39 @@
+<div class="armour-component" *ngIf="armourUnset">
+    <h3>Armour: {{armourSet!.name}} ({{armourSet!.getQualityName()}})</h3>
+    <span class="armour-uses-row" >
+    <counter [counter]="armourSet!.uses.toStore()" (updated)="armourUsed($event)" (value)="updateArmourValue($event)" ></counter> 
+    <button *ngIf="armourSet!.needsRepair()" (click)="repair()" >Repair</button>
+    <button *ngIf="isBroken()" (click)="reduceQuality()" >Reduce Quality</button>
+    </span>
+    <span class="notes" >
+	{{armourSet!.notes}}
+    </span>
+</div>
+<div class="add-armour" *ngIf="armourUnset || editing" >
+    <div class="equipment-form" >
+	<label for="armour-name" >
+	    Name
+	</label>
+	<input type="text" name="armour_name" id="armour-name" [(ngModel)]="armourSet!.name" />
+    </div>
+    <div class="equipment-form" >
+	<label for="armour-quality" >
+	    Quality
+	</label>
+	<select name="armour_quality" id="armour-quality" [(ngModel)]="armourSet!.currentQuality">
+	    <option value="EquipmentQuality.Basic" >Basic</option>
+	    <option value="EquipmentQuality.Serviceable" >Serviceable</option>
+	    <option value="EquipmentQuality.Masterful" >Masterful</option>
+	</select>
+    </div>
+    <div class="equipment-form" >
+	<label for="armour-notes" >
+	    Notes
+	</label>
+	<textarea name="armour_notes" id="armour-notes" [(ngModel)]="armourSet!.notes" ></textarea>
+    </div>
+    <div class="equipment-form-controls" >
+	<button class="btn" (click)="cancelEdit()">Cancel</button>
+	<button class="btn" (click)="saveEdit()" >Save</button>
+    </div>
+</div>

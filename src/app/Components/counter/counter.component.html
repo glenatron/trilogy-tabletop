@@ -1,0 +1,53 @@
+<div class="counter" >
+    <div class="counter-edit"  *ngIf="editView==true" >
+	<div class="counter-title-row">
+	<span class="edit-counter-title" >
+	    <label for="edit-counter-title" >
+		Title
+	    </label>
+		<input
+		  id="edit-counter-title"
+		  name="edit-counter-title" 
+		  type="text"
+		  [(ngModel)]="counter.name" />
+	</span>
+	<span class="edit-counter-size" >
+	    <label for="edit-counter-size" >
+		Size
+	    </label>
+	    <input
+	      type="number"
+	      id="edit-counter-size"
+	      name="edit-counter-size"
+	      value="5"
+	      max="10"
+	      min="2"
+	      [(ngModel)]="counter.size"
+	      />
+	</span>
+	</div>
+	<div class="edit-counter-description">
+	    <textarea id="edit-counter-description"
+                      name="edit-counter-description"
+                      [(ngModel)]="counter.description">
+	    </textarea>
+	</div>
+	<div class="edit-counter-buttons">
+	<button class="btn btn-success" (click)="saveCounter()" >Save</button>
+	<button type="button" class="btn btn-cancel" (click)="cancelEdit()">Cancel</button>
+	</div>
+    </div>
+    <div class="counter"  *ngIf="editView==false" >
+	<span class="counter-title">
+	    {{counter.name}}
+	</span>
+	<ul class="counter-list">
+	    <li *ngFor="let i of getArray()"
+			[ngClass]="{'filled' : (i <= counter.value), 'empty': (counter.value < i)}"
+		        (click)="setValue(i)"
+	    >
+	    </li>
+	</ul>
+    </div>
+
+</div>

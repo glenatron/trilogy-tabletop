@@ -1,0 +1,22 @@
+.gm-view-header {
+    background-color: black;
+    color: white;
+    padding: 1em;
+    width: 100%;
+    font-weight: bold;
+}
+.game-loaded {
+    
+}
+.game-layout {
+    display: flex;
+    flex-direction: row;
+}
+.player-list {
+    min-height: 10em;
+    flex-grow: 1;
+}
+.gm-options {
+    flex-grow: 1;
+}
+

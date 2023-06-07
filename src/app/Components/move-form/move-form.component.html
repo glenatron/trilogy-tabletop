@@ -1,0 +1,69 @@
+<ul class="move-form-list" >
+    <li class="move-form-element" >
+	<label for="form-name">
+	    Name:
+	</label>
+	<input type="text"
+	       id="form-name"
+	       name="form_name"
+	       [(ngModel)]="moveSummary.name" />
+    </li>
+    <li class="move-form-element" >
+	<label for="form-trigger">
+	    Trigger:
+	</label>
+	<textarea
+	  id="form-trigger"
+	  name="form_trigger"
+	  [(ngModel)]="moveSummary.trigger" ></textarea>
+    </li>
+    <li class="move-form-element" >
+	<label for="form-stat">
+	    Stat:
+	</label>
+	<input type="text"
+	       id="form-stat"
+	       name="form_stat"
+	       [(ngModel)]="moveSummary.stat" />
+    </li>
+    <li class="move-form-element" >
+	<label for="form-full-success">
+	    Full Success:
+	</label>
+	<textarea
+	  id="form-full-success"
+	  name="form_full_success"
+	  [(ngModel)]="moveSummary.fullSuccess" ></textarea>
+    </li>
+    <li class="move-form-element" >
+	<label for="form-intermediate-success">
+	    Intermediate Successs:
+	</label>
+	<textarea
+	  id="form-intermediate-success"
+	  name="form_intermediate_success"
+	  [(ngModel)]="moveSummary.intermediate" ></textarea>
+    </li>
+    <li class="move-form-element" >
+	<label for="form-failure">
+	    Failure:
+	</label>
+	<textarea
+	  id="form-failure"
+	  name="form_failure"
+	  [(ngModel)]="moveSummary.failure" ></textarea>
+    </li>
+    <li class="move-form-element" >
+	<label for="form-source">
+	    Source:
+	</label>
+	<input type="text"
+	       id="form-source"
+	       name="form_source"
+	       [(ngModel)]="moveSummary.source" />
+    </li>
+    <li class="move-form-element" >
+	<button type="button" class="btn btn-cancel" (click)="cancelMove()">Cancel</button>
+	<button type="button" class="btn btn-save" (click)="saveMove()" >Save</button>
+    </li>
+</ul>

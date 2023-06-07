@@ -1,0 +1,72 @@
+<div class="character-form pop-up-form" >
+    <h2>New Character</h2>
+    <div class="step step-0" *ngIf="0 <= step" >
+	<p>
+	    <label for="name-box" >Name</label>
+	    <input type="text" id="name-box" name="name_box" [(ngModel)]="character.name" />
+	</p>
+	<p>
+	    <label for="arc-dropdown" >Arc</label>
+	    <select id="arc-dropdown" name="arc_dropdown" [(ngModel)]="chosenArc.name" >
+		<option *ngFor="let name of arcNames()" value="{{name}}">{{name}}</option>
+	    </select>
+	</p>
+	<p *ngIf="step == 0">
+	    <button class="btn save-button" (click)="saveStep0()">Save</button>
+	</p>
+    </div>
+    <div class="step step-1" *ngIf="1 <= step" >
+	<h3>Stats</h3>
+	<ul class="stats" >
+	    <li class="single-stat" *ngFor="let stat of character.stats" >
+		<label for="stat_{{statName(stat.name)}}" >
+		    {{stat.name}}
+		</label>
+		<input type="number" name="stat_{{statName(stat.name)}}" id="stat-{{statName(stat.name)}}" [(ngModel)]="stat.modifier" min="-1" max="2" />
+	    </li>
+	</ul>
+	<h3>History</h3>
+	<div class="background" >
+	    <p>
+		<label for="background-name" >Background:</label>
+		<input
+		  type="text"
+		  id="background-name"
+		  name="background_name"
+		  [(ngModel)]="chosenBackground.name" />
+	    </p>
+	    <p>
+		<label for="background-description" >Description:</label>
+		<textarea
+		  id="background-description"
+		  name="background_description"
+		  [(ngModel)]="chosenBackground.description" ></textarea>
+	    </p>
+	    <p *ngIf="chosenBackground.move == null">
+		<button type="button" class="btn btn-submit" (click)="addBackgroundMove()">Add Background Move</button>
+	    </p>
+	    <move-form *ngIf="chosenBackground.move != null" [moveSummary]="chosenBackground.move" (save)="saveBackgroundMove($event)" (cancel)="cancelBackgroundMove($event)" ></move-form>
+	    <p class="complication" >
+		<label for="complication-text" >Complication:</label>
+		<textarea
+		  id="complication-text"
+		  name="complication_text"
+		  [(ngModel)]="character.complication" ></textarea>	
+	    </p>
+
+	</div>
+	<p *ngIf="step == 1">
+	    <button class="btn save-button" (click)="saveStep1()">Save</button>
+	</p>
+
+    </div>
+    <div class="step step-2" *ngIf="2 <= step">
+	<h3>Equipment</h3>
+	<armour [armourSet]="armour()" (armourSave)="saveArmour($event)" ></armour>
+	<character-equipment [equipment]="equipment | async" (updateEquipment)="saveEquipment($event)" ></character-equipment>
+	<p>
+	    <button class="btn save-button" (click)="saveAll()">Save</button>
+	</p>
+    </div>
+    
+</div>

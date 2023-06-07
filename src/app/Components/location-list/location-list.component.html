@@ -1,0 +1,25 @@
+<div class="location-list">
+    <div class="component-header" >
+    <h3>Locations</h3>
+    <span class="toggle" >
+	<button (click)="toggleOpen()" class="btn-toggle btn-toggle-open" *ngIf="!open" ><</button>
+	<button (click)="toggleOpen()" class="btn-toggle btn-toggle-closed" *ngIf="open" >v</button>
+    </span>
+    </div>
+    <ul class="locations" *ngIf="open" >
+	<li class="location" *ngFor="let location of liveLocations | async" >
+	    {{location.name}}
+	    <button (click)="openLocation(location)" >Edit</button>
+	    <button (click)="addToScene(location)">Create/add to Scene</button>
+	    <p>{{location.description}}</p>
+	    <ul class="child-locations" *ngIf="0 < location.childLocations.length">
+		<li *ngFor="let childLoc of getChildLocations(location)" >
+		    {{childLoc.name}}
+		</li>
+	    </ul>
+	</li>
+	<li class="location" >
+	    <button (click)="createLocation()" >Create Location</button>
+	</li>
+    </ul>
+</div>

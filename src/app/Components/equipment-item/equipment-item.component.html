@@ -1,0 +1,10 @@
+<div class="equipment" >
+    <span class="name" >{{item!.name}}</span>
+    <span class="quality" >{{item!.getQualityName()}}
+    <button *ngIf="item!.needsRepair()" (click)="repair()" >Repair</button>
+    <button *ngIf="isBroken()" (click)="reduceQuality()" >Reduce Quality</button>
+    </span>
+    <span class="notes" >
+	{{item!.notes}}
+    </span>
+</div>
