@@ -17,7 +17,7 @@ export class LocationListComponent implements OnInit {
 
     public liveLocations = new Subject<Array<Location>>();
 
-    public open = true;
+    public currentLocation = "";
 
     private liveLocs = new Array<Location>();
 
@@ -32,12 +32,11 @@ export class LocationListComponent implements OnInit {
 
     }
 
-    public toggleOpen(): void {
-        this.open = !this.open;
-        if (this.open) {
-            setTimeout(() => {
-                this.liveLocations.next(this.liveLocs);
-            }, 1);
+    public locationDetail(locName: string): void {
+        if (locName == this.currentLocation) {
+            this.currentLocation = "";
+        } else {
+            this.currentLocation = locName;
         }
     }
 

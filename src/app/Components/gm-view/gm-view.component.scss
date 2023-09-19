@@ -2,7 +2,6 @@
     background-color: black;
     color: white;
     padding: 1em;
-    width: 100%;
     font-weight: bold;
 }
 .game-loaded {
@@ -11,6 +10,8 @@
 .game-layout {
     display: flex;
     flex-direction: row;
+    height: 100%;
+    min-height: 80vh;
 }
 .player-list {
     min-height: 10em;

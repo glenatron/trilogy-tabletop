@@ -11,8 +11,6 @@ export class NpcListComponent implements OnInit {
 
     public creating = false;
 
-    public open = true;
-
     public liveNPCs = new Subject<Array<NPC>>();
 
     private npcs = new Array<NPC>();
@@ -32,12 +30,10 @@ export class NpcListComponent implements OnInit {
     }
 
     public toggleOpen() {
-        this.open = !this.open;
-        if (this.open) {
-            setTimeout(() => {
-                this.liveNPCs.next(this.npcs);
-            }, 1);
-        }
+
+        setTimeout(() => {
+            this.liveNPCs.next(this.npcs);
+        }, 1);
     }
 
 

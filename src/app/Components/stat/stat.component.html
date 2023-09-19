@@ -17,17 +17,17 @@
 			   name="{{statistic.name}}-advantage" id="{{statistic.name}}_advantage"
 			   (click)="toggleAdvantage()"
 		    >
-		    <label for="{{statistic.name}}_advantage">Advantage</label>
+		    <label for="{{statistic.name}}_advantage">Adv</label>
 		</li>
 		<li>
-		    <button type="button" class="btn btn-stat-advantage">Roll</button>
+		    <button type="button" class="btn btn-stat-advantage" (click)="triggerRoll()" >Roll</button>
 		</li>
 		<li>
-		    <input type="checkBox" [(ngModel)]="advantageToggle.advantage"
+		    <input type="checkBox" [(ngModel)]="advantageToggle.disadvantage"
 			   name="{{statistic.name}}-disadvantage" id="{{statistic.name}}_disadvantage"
 			   (click)="toggleDisadvantage()"
 		    >
-		    <label for="{{statistic.name}}_disadvantage">Disadvantage</label>
+		    <label for="{{statistic.name}}_disadvantage">Dis</label>
 		</li>
 	    </ul>
 	</div>

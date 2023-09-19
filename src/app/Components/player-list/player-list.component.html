@@ -1,13 +1,6 @@
 
 <div class="player-list-container" >
-    <div class="component-header" >
-	<h2>Players</h2>
-	<span class="toggle" >
-	    <button (click)="toggleOpen()" class="btn-toggle btn-toggle-open" *ngIf="!open" ><</button>
-	    <button (click)="toggleOpen()" class="btn-toggle btn-toggle-closed" *ngIf="open" >v</button>
-	</span> 
-    </div>
-	<ul class="player-list" *ngIf="open" >
+	<ul class="player-list"  >
 	    <li *ngFor="let player of players | async">
 		<player [id]="player.id" [gmView]="true" ></player>
 	    </li>

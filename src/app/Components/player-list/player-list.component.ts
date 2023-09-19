@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { FocusList } from '../../Directives/focus-list.directive';
 import { TrilogyGameService } from '../../Services/trilogy-game.service';
 import { Player, IPlayer } from '../../../../../../trilogy-core/src/Player';
 
@@ -8,9 +9,7 @@ import { Player, IPlayer } from '../../../../../../trilogy-core/src/Player';
     templateUrl: './player-list.component.html',
     styleUrls: ['./player-list.component.scss']
 })
-export class PlayerListComponent implements OnInit {
-
-    public open: boolean = true;
+export class PlayerListComponent extends FocusList implements OnInit {
 
     public add: boolean = false;
 
@@ -20,27 +19,28 @@ export class PlayerListComponent implements OnInit {
 
     public players = new BehaviorSubject<Array<Player>>([]);
 
+    public listType = "player-list";
+
+    private detectorReady = false;
 
     constructor(public gameService: TrilogyGameService, public changeDetector: ChangeDetectorRef) {
+        super();
         this.playerSummary = this.emptyPlayer();
         this.gameService.players.subscribe(pl => {
             if (0 < pl.length) {
                 this.playersExist = true;
-            } else {
-                this.open = true;
             }
-            this.changeDetector.detectChanges();
+            if (this.detectorReady) {
+                this.changeDetector.detectChanges();
+            }
             this.players.next(pl);
         });
     }
 
 
     ngOnInit(): void {
-
-    }
-
-    public toggleOpen(): void {
-        this.open = !this.open;
+        this.detectorReady = true;
+        this.changeDetector.detectChanges();
     }
 
     public openAddition(): void {

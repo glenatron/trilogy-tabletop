@@ -28,6 +28,8 @@ export class GmViewComponent implements OnInit {
 
     public playerId = '';
 
+    public openModal = false;
+
     constructor(public gameService: TrilogyGameService) {
         this.game = new Game(null);
         this.gameService.game.subscribe(x => {
@@ -68,6 +70,9 @@ export class GmViewComponent implements OnInit {
         this.gameService.rollNotification(this.playerId, roll);
     }
 
+    public openModalWindow(): void {
+        this.openModal = true;
+    }
 
 
 

@@ -41,6 +41,10 @@ export class HarmTrackComponent implements OnInit {
         }
     }
 
+    public clearHarm(harm: IHarm) {
+        this.cleared.emit(harm);
+    }
+
     public setUpdateLevel(lv: number) {
         if (!this.harmOpen[lv][0]) {
             this.harmOpen[lv][0] = true;

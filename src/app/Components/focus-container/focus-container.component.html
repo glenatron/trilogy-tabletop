@@ -1,0 +1,8 @@
+<div [ngClass]="{'focus-container': true, 'container-open': isFullHeight(), 'container-even': isConsistentHeight() }">
+    <h3 class="focus-container-title" (click)="toggleContainer()">{{title}}</h3>
+    <div class="focus-container-content-wrapper" *ngIf="isOpen()" >
+	<div class="focus-container-content" >
+	    <ng-content></ng-content>
+	</div>
+    </div>
+</div>

@@ -1,3 +1,4 @@
+<h2>Harm</h2>
 <ul [ngClass]="{ 'harm-track': true, 'mild-danger': inDanger(), 'severe-harm': inSevereHarm(), 'mortal-danger': inMortalDanger() }">
     <li class="harm-level-1">
 	<h3 class="harm-title">Level 1</h3>
@@ -6,8 +7,12 @@
 		<textarea [(ngModel)]="level.harm.value"  ></textarea>
 		<button class="btn update-harm" (click)="updateLevel(level.harm)">Update</button>
 	    </div>
-	    <div *ngIf="!level.harm.value" class="empty-harm">
+	    <div *ngIf="!level.harm.value && !level.open" class="empty-harm">
 		<button class="btn update-harm" (click)="setUpdateLevel(1)"> + </button>
+	    </div>
+	    <div *ngIf="level.harm.value && !level.open" class="full-harm">
+		<div class="harm-content">{{level.harm.value}}</div>
+		<button class="btn update-harm" (click)="clearHarm(level.harm)"> - </button>
 	    </div>
 	</div>
 

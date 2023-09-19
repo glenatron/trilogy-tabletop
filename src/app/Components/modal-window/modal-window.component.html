@@ -1,0 +1,31 @@
+<div [ngClass]="{ 'modal-window': true, 'modal-window-minimised': minimised, 'modal-window-maximised': maximised }"
+     [ngStyle]="{ 'top': top+'px', 'left': left+'px', 'width': width+'px', 'height': height+'px' }"
+     *ngIf="open">
+    <div class="modal-minimised" *ngIf="minimised" >
+	<div class="modal-title" (mousedown)="startTopDrag($event)" >
+	    <h4>{{title}}</h4>
+	    <span class="modal-title-buttons" >
+		<button class="modal-button modal-maximise" (click)="toggleMinimise()" >^</button>
+		<button class="modal-button modal-close" (click)="closeModal()" >x</button>
+	    </span>
+	</div>
+    </div>
+    <div class="modal-maximised" *ngIf="maximised">
+    <div class="modal-bar modal-left-bar"(mousedown)="startLeftDrag($event)"></div>
+    <div class="modal-bar modal-right-bar" (mousedown)="startRightDrag($event)" ></div>
+    <div class="modal-wrapper" [ngStyle]="{ 'height': height+'px' }" >
+	<div class="modal-title" (mousedown)="startTopDrag($event)" >
+	    <h4>{{title}}</h4>
+	    <span class="modal-title-buttons" >
+	    <button class="modal-button modal-minimise" (click)="toggleMinimise()" *ngIf="maximised" >-</button>
+	    <button class="modal-button modal-close" (click)="closeModal()" >x</button>
+	    </span>
+	</div>
+	<div class="modal-content" *ngIf="maximised">
+	    <ng-content></ng-content>
+	</div>
+    </div>
+    <div class="modal-corner" (mousedown)="startCornerDrag($event)" ></div>
+    <div class="modal-bar modal-bottom-bar" (mousedown)="startBottomDrag($event)" ></div>
+    </div>
+</div>

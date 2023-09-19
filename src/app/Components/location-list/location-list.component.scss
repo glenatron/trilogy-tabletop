@@ -3,4 +3,11 @@
 }
 .locations {
     list-style-type: none;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+.title-selected {
+    background-color: var(--pale-leather);
+    color: var(--deep-gold);
+    padding: 0.5em;
 }

@@ -24,10 +24,13 @@ import { ArmourComponent } from './Components/armour/armour.component';
 import { ArcComponent } from './Components/arc/arc.component';
 import { PlayerComponent } from './Components/player/player.component';
 import { PlayerListComponent } from './Components/player-list/player-list.component';
-import { MoveFormComponent } from './components/move-form/move-form.component';
-import { ChatComponent } from './components/chat/chat.component';
-import { GmMenuComponent } from './components/gm-menu/gm-menu.component';
-import { SafeHtmlPipe } from './services/safe-html.pipe';
+import { MoveFormComponent } from './Components/move-form/move-form.component';
+import { ChatComponent } from './Components/chat/chat.component';
+import { GmMenuComponent } from './Components/gm-menu/gm-menu.component';
+import { SafeHtmlPipe } from './Services/safe-html.pipe';
+import { FocusContainerComponent } from './Components/focus-container/focus-container.component';
+import { FocusListSetComponent } from './Components/focus-list-set/focus-list-set.component';
+import { ModalWindowComponent } from './Components/modal-window/modal-window.component';
 
 @NgModule({
     declarations: [
@@ -55,7 +58,10 @@ import { SafeHtmlPipe } from './services/safe-html.pipe';
         MoveFormComponent,
         ChatComponent,
         GmMenuComponent,
-        SafeHtmlPipe
+        SafeHtmlPipe,
+        FocusContainerComponent,
+        FocusListSetComponent,
+        ModalWindowComponent,
     ],
     imports: [
         BrowserModule,

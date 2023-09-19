@@ -1,11 +1,8 @@
 <div class="character-sheet" *ngIf="character != null">
     <div class="character-sheet-title component-header">
-	<h2>{{character.name}}</h2>
-	<span class="toggle" >
-	    <button (click)="toggleOpen()" class="btn-toggle btn-toggle-open" *ngIf="!open" ><</button>
-	    <button (click)="toggleOpen()" class="btn-toggle btn-toggle-closed" *ngIf="open" >v</button>
-	</span>
+	<h2 (click)="toggleOpen()">{{character.name}}</h2>
     </div>
+    <modal-window [title]="character.name + ' character sheet'" [open]="open" >
     <div class="character-sheet-content" *ngIf="open" >
 	<!-- arc / xp -->
 	<div class="character-top" >
@@ -61,5 +58,5 @@
 	    </ul>
 	</div>
     </div>
-    
+    </modal-window>
 </div>
