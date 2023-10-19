@@ -29,7 +29,6 @@ export class LocationListComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
     }
 
     public locationDetail(locName: string): void {

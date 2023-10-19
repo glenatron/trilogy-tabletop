@@ -1,59 +1,64 @@
 <h2>Harm</h2>
-<ul [ngClass]="{ 'harm-track': true, 'mild-danger': inDanger(), 'severe-harm': inSevereHarm(), 'mortal-danger': inMortalDanger() }">
+<div class="harm-form" *ngIf="formOpen" >
+    <div class="harm-row" >
+	<label for="harm-level-dropdown">Level:</label>
+	<select id="harm-level-dropdown" [(ngModel)]="editHarm.level" >
+	    <option value="1">1</option>
+	    <option value="2">2</option>
+	    <option value="3">3</option>
+	    <option value="4">4</option>
+	</select>
+    </div>
+    <div class="harm-row-description" >
+	<label for="harm-description-container" >Description:</label>
+	<textarea [(ngModel)]="editHarm.value"  ></textarea>
+    </div>
+    <div class="harm-row">
+	<button class="btn cancel-harm" (click)="cancelUpdate()" >Cancel</button>
+	<button class="btn save-harm" (click)="updateHarm()" >Save</button>
+    </div>
+</div>
+<div class="harm-add-button" *ngIf="!formOpen">
+    <button class="btn add-harm" (click)="addHarm()">Add Harm</button>
+</div>
+<ul [ngClass]="{ 'harm-track': true, 'mild-danger': mildDanger, 'severe-harm': severeDanger, 'mortal-danger': mortalDanger }">
     <li class="harm-level-1">
 	<h3 class="harm-title">Level 1</h3>
-	<div class="harm-level" *ngFor="let level of getHarmAtLevel(1)" >
-	    <div *ngIf="level.open">
-		<textarea [(ngModel)]="level.harm.value"  ></textarea>
-		<button class="btn update-harm" (click)="updateLevel(level.harm)">Update</button>
-	    </div>
-	    <div *ngIf="!level.harm.value && !level.open" class="empty-harm">
-		<button class="btn update-harm" (click)="setUpdateLevel(1)"> + </button>
-	    </div>
-	    <div *ngIf="level.harm.value && !level.open" class="full-harm">
-		<div class="harm-content">{{level.harm.value}}</div>
-		<button class="btn update-harm" (click)="clearHarm(level.harm)"> - </button>
+	<div class="harm-level" *ngFor="let level of this.harmLevels[0]" >
+	    <div *ngIf="level.value" class="full-harm">
+		<div class="harm-content">{{level.value}}</div>
+		<button class="btn update-harm" (click)="clearHarm(level)"> - </button>
 	    </div>
 	</div>
-
     </li>
     <li class="harm-level-2">
 	<h3 class="harm-title">Level 2</h3>
-	<div class="harm-level" *ngFor="let level of getHarmAtLevel(2)" >
-	    <div *ngIf="level.open">
-		<textarea [(ngModel)]="level.harm.value"  ></textarea>
-		<button class="btn update-harm" (click)="updateLevel(level.harm)">Update</button>
-	    </div>
-	    <div *ngIf="!level.harm.value" class="empty-harm">
-		<button class="btn update-harm" (click)="setUpdateLevel(2)"> + </button>
+	<div class="harm-level" *ngFor="let level of this.harmLevels[1]" >
+	    <div *ngIf="level.value" class="full-harm">
+		<div class="harm-content">{{level.value}}</div>
+		<button class="btn update-harm" (click)="clearHarm(level)"> - </button>
 	    </div>
 	</div>
-
     </li>
-    <li class="harm-level-3">
+    <li class="harm-level-3-and-4">
+	<div class="harm-level-3">
 	<h3 class="harm-title">Level 3</h3>
-	<div class="harm-level" *ngFor="let level of getHarmAtLevel(3)" >
-	    <div *ngIf="level.open">
-		<textarea [(ngModel)]="level.harm.value"  ></textarea>
-		<button class="btn update-harm" (click)="updateLevel(level.harm)">Update</button>
-	    </div>
-	    <div *ngIf="!level.harm.value" class="empty-harm">
-		<button class="btn update-harm" (click)="setUpdateLevel(3)"> + </button>
+	<div class="harm-level" *ngFor="let level of this.harmLevels[2]" >
+	    <div *ngIf="level.value" class="full-harm">
+		<div class="harm-content">{{level.value}}</div>
+		<button class="btn update-harm" (click)="clearHarm(level)"> - </button>
 	    </div>
 	</div>
-    </li>
-    <li class="harm-level-4" *ngIf="">
+	</div>
+	<div class="harm-level-4" >
 	<h3 class="harm-title">Level 4</h3>
-	<div class="harm-level" *ngFor="let level of getHarmAtLevel(4)" >
-	    <div *ngIf="level.open" >
-		<textarea [(ngModel)]="level.harm.value"  ></textarea>
-		<button class="btn update-harm" (click)="updateLevel(level.harm)">Update</button>
-	    </div>
-	    <div *ngIf="!level.harm.value" class="empty-harm">
-		<button class="btn update-harm" (click)="setUpdateLevel(4)"> + </button>
+	<div class="harm-level" *ngFor="let level of this.harmLevels[3]" >
+	    <div *ngIf="level.value" class="full-harm">
+		<div class="harm-content">{{level.value}}</div>
+		<button class="btn update-harm" (click)="clearHarm(level)"> - </button>
 	    </div>
 	</div>
-
+	</div>
     </li>
     
 </ul>

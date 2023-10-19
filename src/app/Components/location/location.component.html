@@ -1,21 +1,21 @@
 <div class="location-card" >
     <div class="location" >
-	<h2>New Location</h2>
-	<div class="form-group">
+	<h2>{{locationTitle()}}</h2>
+	<div class="form-group-horizontal">
 	    <label for="name" >Name</label>
 	    <input type="text" class="form-control" id="name"
 		   required
 		   [(ngModel)]="location!.name" name="name" >
 	</div>
 
-	<div class="form-group">
+	<div class="form-group-vertical">
 	    <label for="description" >Description</label>
 	    <textarea class="form-control" id="description"
 		      [(ngModel)]="location!.description" name="description" >
             </textarea>
 	</div>
 	<div class="gm-card-section" *ngIf="gmView==true">
-	    <div class="form-group" >
+	    <div class="form-group-vertical" >
 	    <label for="gmNotes" >GM Notes</label>
 	    <textarea class="form-control" id="gmNotes"
 		      [(ngModel)]="location!.GMNotes" name="gmNotes" >

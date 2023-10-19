@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { TrilogyGameService } from '../../Services/trilogy-game.service';
 import { IStatistic } from '../../../../../../trilogy-core/src/Character/IStatistic';
 import { Counter, IStoredCounter } from '../../../../../../trilogy-core/src/Character/Counter';
@@ -7,6 +7,11 @@ import { ITrilogyCharacterTemplate } from '../../../../../../trilogy-core/src/Ch
 import { IMoveRoll } from '../../../../../../trilogy-core/src/Character/IMoveSummary';
 import { TrilogyCharacter } from '../../../../../../trilogy-core/src/Character/TrilogyCharacter';
 import { IHarm } from '../../../../../../trilogy-core/src/Character/HarmTrack';
+import { IMoveSummary } from '../../../../../../trilogy-core/src/Character/IMoveSummary';
+import { CharacterArc } from '../../../../../../trilogy-core/src/Character/CharacterArc';
+import { ITurningPoint, IArcSummary } from '../../../../../../trilogy-core/src/Character/IArcSummary';
+import { IEquipment } from '../../../../../../trilogy-core/src/Character/IEquipment';
+import { Equipment } from '../../../../../../trilogy-core/src/Character/Equipment';
 
 @Component({
     selector: 'character',
@@ -17,11 +22,21 @@ export class CharacterComponent implements OnInit {
 
     @Input() id: string = '';
 
+    @Output() triggerEdit = new EventEmitter();
+
     public character: TrilogyCharacter | null = null;
 
     public open = false;
 
     public editing = false;
+
+    public turningPointReached = false;
+
+    public showTurningPointForm = false;
+
+    public turningPointName = "";
+
+    public turningPointMove: IMoveSummary | null = null;
 
     constructor(public gameService: TrilogyGameService) {
 
@@ -40,6 +55,19 @@ export class CharacterComponent implements OnInit {
                 }
             });
         }
+    }
+
+    public modalWidth(): number {
+        return Math.ceil(window.innerWidth * 0.75);
+    }
+
+    public modalHeight(): number {
+        return Math.ceil(window.innerHeight * 0.75);
+    }
+
+    public toggleEdit(): void {
+        this.open = false;
+        this.triggerEdit.emit();
     }
 
     public toggleOpen(): void {
@@ -71,13 +99,17 @@ export class CharacterComponent implements OnInit {
     }
 
     public updateHarm(newHarm: IHarm): void {
-        this.character!.harm.addHarm(newHarm.level, newHarm.value, this.character!);
-        this.characterUpdated();
+        if (this.character != null) {
+            this.character.harm.addHarm(newHarm.level, newHarm.value, this.character!);
+            this.characterUpdated();
+        }
     }
 
     public clearHarm(newHarm: IHarm): void {
-        this.character!.harm.clearHarm(newHarm.order, this.character!);
-        this.characterUpdated();
+        if (this.character != null) {
+            this.character.harm.clearHarm(newHarm.order, this.character!);
+            this.characterUpdated();
+        }
     }
 
     public updateWealth(newWealth: IStoredCounter): void {
@@ -92,7 +124,52 @@ export class CharacterComponent implements OnInit {
 
     public updateXPValue(newValue: number): void {
         this.character!.xp.setValue(newValue);
+        if (7 <= this.character!.xp.getValue()) {
+            this.turningPointReached = true;
+        }
         this.characterUpdated();
+    }
+
+    public turningPoint() {
+        this.showTurningPointForm = true;
+    }
+
+
+    public availableTurningPoints(): Array<ITurningPoint> {
+        let arc = this.character!.currentArc();
+        return arc.getAvailableTurningPoints();
+    }
+
+    public changeSelectedTurningPoint(ev: Event): void {
+        this.turningPointName = (ev.target as HTMLSelectElement).selectedOptions[0].value;
+    }
+
+    public chooseTurningPoint(): void {
+        const arc = this.character!.currentArc();
+        const arcIndex = arc.summary.turningPoints.findIndex(x => x.title == this.turningPointName);
+        if (0 <= arcIndex) {
+            arc.addTurningPoint(arcIndex);
+            if (this.turningPointMove != null) {
+                arc.addAdvancedMove(this.turningPointMove.name);
+                this.character!.addMove(this.turningPointMove!);
+                this.turningPointMove = null;
+            }
+            this.turningPointName = "";
+            this.character!.xp.setValue(0);
+            this.showTurningPointForm = false;
+            this.characterUpdated();
+        }
+    }
+
+    public availableMoves(): Array<IMoveSummary> {
+        let arc = this.character!.currentArc();
+        return arc.getAvailableAdvancedMoves();
+    }
+
+    public changeShownMove(ev: Event): void {
+        const selectbox = (ev.target as HTMLSelectElement);
+        const selectedValue = selectbox.selectedOptions[0].value;
+        this.turningPointMove = this.availableMoves().find(x => x.name == selectedValue) || null;
     }
 
     public rollMove(move: IMoveRoll): void {
@@ -101,6 +178,31 @@ export class CharacterComponent implements OnInit {
         roller.modifier = this.character!.stats[statIndex].modifier;
         roller.rollType = move.rollType;
         this.gameService.roll(roller, this.character!.name, move.selectedStat);
+    }
+
+    public handleEquipmentUpdate(item: IEquipment): void {
+        if (this.character != null) {
+            let idx = this.character.equipment.findIndex(x => x.id == item.id);
+            if (0 <= idx) {
+                this.character.equipment[idx] = Equipment.fromStore(item);
+            } else {
+                this.character.equipment.push(Equipment.fromStore(item));
+            }
+            this.characterUpdated();
+        }
+    }
+
+    public handleEquipmentRemove(item: IEquipment): void {
+        if (this.character != null) {
+            let idx = this.character.equipment.findIndex(x => x.id == item.id);
+            let equipment = new Array<Equipment>();
+            for (let i = 0; i < this.character.equipment.length; i++) {
+                if (i != idx) {
+                    equipment.push(this.character.equipment[i]);
+                }
+            }
+            this.character.equipment = equipment;
+        }
     }
 
     private characterUpdated(): void {

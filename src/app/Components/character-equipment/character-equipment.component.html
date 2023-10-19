@@ -1,10 +1,14 @@
-<ul class="equipment" >
+<ul class="equipment-list" >
     <li *ngFor="let eqItem of localEquipment">
 	<equipment-item [item]="eqItem" ></equipment-item>
+	<span class="equipment-controls">
+	    <button class="btn" (click)="editItem(eqItem)">Edit</button>
+	    <button class="btn" (click)="removeItem(eqItem)">Remove</button>
+	</span>
     </li>
     <li class="controls">
 	<button class="btn" *ngIf="!addFormOpen" (click)="showAddForm()" >Add</button>
-	<div *ngIf="addFormOpen" >
+	<div *ngIf="addFormOpen" class="equipment-form-container" >
 	    <div class="equipment-form" >
 		<label for="equipment-name" >
 		    Name
@@ -16,9 +20,9 @@
 		    Quality
 		</label>
 		<select name="equipment_quality" id="equipment-quality" [(ngModel)]="editEquipment.currentQuality">
-		    <option value="EquipmentQuality.Basic" >Basic</option>
-		    <option value="EquipmentQuality.Serviceable" >Serviceable</option>
-		    <option value="EquipmentQuality.Masterful" >Masterful</option>
+		    <option value="{{ComponentEquipmentQuality.Basic}}" >Basic</option>
+		    <option value="{{ComponentEquipmentQuality.Serviceable}}" >Serviceable</option>
+		    <option value="{{ComponentEquipmentQuality.Masterful}}" >Masterful</option>
 		</select>
 	    </div>
 	    <div class="equipment-form" >

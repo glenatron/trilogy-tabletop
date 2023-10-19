@@ -32,6 +32,10 @@ export class LocationComponent implements OnInit {
         }
     }
 
+    public locationTitle(): string {
+        return (this.location != null) ? this.location.name : "New Location";
+    }
+
     public saveLocation() {
         const loc = new Location(this.location!);
         this.gameService.addLocation(loc);

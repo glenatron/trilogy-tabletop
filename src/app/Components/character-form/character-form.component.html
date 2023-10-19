@@ -1,5 +1,6 @@
+<modal-window [title]="'New Character'" [open]="open" [width]="modalWidth()" [height]="modalHeight()" >
 <div class="character-form pop-up-form" >
-    <h2>New Character</h2>
+    <h2>{{titleText}}</h2>
     <div class="step step-0" *ngIf="0 <= step" >
 	<p>
 	    <label for="name-box" >Name</label>
@@ -68,5 +69,18 @@
 	    <button class="btn save-button" (click)="saveAll()">Save</button>
 	</p>
     </div>
+    <div class="step step-3" *ngIf="3 <= step" >
+	<h3>Moves</h3>
+	<div class="move-form" *ngIf="this.editMove != null" >
+	    
+	</div>
+	<ul>
+	    <li *ngFor="let move of editableMoves()" >
+		<a (click)="editMoveByName(move.name)">{{move!.name}}</a>
+	    </li>
+	</ul>
+
+    </div>
     
 </div>
+</modal-window>

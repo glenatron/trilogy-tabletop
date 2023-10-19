@@ -15,95 +15,98 @@ export class HarmTrackComponent implements OnInit {
 
     @Output() cleared = new EventEmitter<IHarm>();
 
-    private harmOpen: Array<Array<boolean>> = [[], [false, false], [false, false], [false], [false]];
+    public mildDanger = false;
+
+    public severeDanger = false;
+
+    public mortalDanger = false;
+
+    public harmLevels: Array<Array<IHarm>> = [[], [], [], []];
+
+    public editHarm = this.emptyHarm();
+
+    public formOpen = false;
 
     constructor(private changeDetector: ChangeDetectorRef) {
     }
 
     ngOnInit(): void {
-    }
-
-    public getHarmAtLevel(level: number): Array<IndexedHarm> {
-        const harms = this.track.harmLevels.filter(x => x.level == level);
-        const found = new Array<IndexedHarm>();
-        for (let i = 0; i < harms.length; i++) {
-            found.push(new IndexedHarm(this.harmOpen[level][i], harms[i]));
-        }
-        return found;
+        this.updateTrack();
     }
 
 
-    public updateLevel(harm: IHarm) {
-        if (harm.value.trim() == '') {
-            this.cleared.emit(harm);
+    public updateHarm() {
+        this.formOpen = false;
+        if (this.editHarm.value.trim() == '') {
+            this.cleared.emit(this.editHarm);
         } else {
-            this.updated.emit(harm);
+            this.updated.emit(this.editHarm);
         }
+        this.setDangerLevel();
+        this.updateTrack();
+        this.editHarm = this.emptyHarm();
     }
 
     public clearHarm(harm: IHarm) {
         this.cleared.emit(harm);
+        this.setDangerLevel();
+        this.updateTrack();
     }
 
-    public setUpdateLevel(lv: number) {
-        if (!this.harmOpen[lv][0]) {
-            this.harmOpen[lv][0] = true;
-        } else {
-            if (this.harmOpen[lv].length == 2) {
-                this.harmOpen[lv][1] = true;
-            }
-        }
+    public addHarm() {
+        this.editHarm = this.emptyHarm();
+        this.formOpen = true;
+    }
+
+    public cancelUpdate() {
+        this.formOpen = false;
+    }
+
+    private updateTrack() {
+        this.harmLevels = [[], [], [], []];
+        this.track.harmLevels.forEach(hl => {
+            this.harmLevels[hl.level - 1].push(hl);
+        });
         this.changeDetector.detectChanges();
-
     }
 
-    public inDanger(): boolean {
-        let harms = this.getHarmAtLevel(2);
+    private setDangerLevel() {
+        this.mildDanger = false;
+        this.severeDanger = false;
+        this.mortalDanger = false;
+        if (this.highLevelHarmExists(4)) {
+            this.mortalDanger = true;
+        } else if (this.highLevelHarmExists(3)) {
+            this.severeDanger = false;
+        } else if (this.inDanger()) {
+            this.mildDanger = true;
+        }
+    }
+
+    private emptyHarm(): IHarm {
+        return { level: 1, order: 0, value: '' };
+    }
+
+    private inDanger(): boolean {
+        let harms = this.harmLevels[1];
         let result = true;
         for (let h of harms) {
-            if (h.open) {
-                if (h.harm.value == '') {
-                    result = false;
-                }
-            } else {
+            if (h.value == '') {
                 result = false;
             }
         }
         return result;
     }
 
-    public inSevereHarm(): boolean {
-        return this.highLevelHarmExists(3);
-    }
-
-    public inMortalDanger(): boolean {
-        return this.highLevelHarmExists(4);
-    }
-
     private highLevelHarmExists(level: number): boolean {
         let result = false;
-        if (this.harmOpen[level][0]) {
-            const harm = this.track.harmLevels.find(x => x.level == level);
-            if (harm && harm.value != '') {
-                result = true;
-            }
+        level--;
+        const harm = this.harmLevels[level][0];
+        if (harm && harm.value != '') {
+            result = true;
         }
+
         return result;
     }
-
-}
-
-class IndexedHarm {
-
-    constructor(
-        public open: boolean,
-        public harm: IHarm) { }
-}
-
-interface IHarmLevelMeasure {
-    1: Array<boolean>,
-    2: Array<boolean>,
-    3: Array<boolean>,
-    4: Array<boolean>
 
 }

@@ -6,14 +6,14 @@
 	<p *ngIf="gmView">Invite code: {{player!.inviteCode}} (link: <span class="link-url">{{getLink()}}</span> ) </p>
 	<ul class="player-characters">
 	    <li class="activeCharacter" *ngIf="player!.activeCharacterId != ''">
-		<character [id]="player!.activeCharacterId"></character>
+		<character [id]="player!.activeCharacterId" (triggerEdit)="editCharacter(player!.activeCharacterId)" ></character>
 	    </li>
 	    <li class="character" *ngFor="let char of characters | async">
-		<character [id]="char.id"></character>
+		<character [id]="char.id" (triggerEdit)="editCharacter(char.id)" ></character>
 	    </li>
 	    <li class="new-character" >
 		<button (click)="createCharacter()" *ngIf="!editing" >New Character</button>
-		<character-form [playerId]="id" (done)="characterCreated($event)" *ngIf="editing" ></character-form>
+		<character-form [playerId]="id" [characterId]="editCharacterId" (done)="characterCreated($event)" *ngIf="editing" ></character-form>
 	    </li>
 	</ul>
     </div>

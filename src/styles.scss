@@ -247,6 +247,90 @@ ul .harm-track {
 .update-harm {
     min-width: 20%;
 }
+.character-sheet-horizontal-split {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+.horizontal-split {
+    width: 50%;
+}
+.equipment-wrapper {
+    width: 100%;
+}
+.equipment-list {
+    list-style-type: none;
+}
+.equipment {
+    display: grid;
+}
+.equipment .name {
+    grid-column: 1;
+}
+.equipment .quality {
+    grid-column: 2;
+    width: 20%;
+}
+.equipment .notes {
+    grid-column: 3;
+}
+.equipment-form-container{
+  padding: 1em;
+  border: 1px solid black;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+.equipment-form {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: start;
+  margin-bottom: 0.5em;
+}
+.equipment-form label {
+  width: 7em;
+}
+.equipment-form textarea {
+    margin: 0;
+    width: 100%;
+}
+.equipment-form input[type="text"] {
+    width: 100%;
+}
+.move-list {
+    width: 100%;
+    column-width: 16em;
+    column-gap: 1em;
+}
+.character-move {
+    padding: 0.5em;
+    border: 1px solid black;
+    border-radius: 0.5em;
+    margin-bottom: 0.5em;
+    break-inside: avoid-column;
+}
+.move-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.select-advantage {
+list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  padding-left: 0;
+}
+.form-group-horizontal {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 1em;
+}
+.form-group-vertical {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+}
 .modal-window-maximised {
    position: fixed;
    width: 60em;

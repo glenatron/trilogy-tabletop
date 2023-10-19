@@ -14,7 +14,7 @@ export class ArmourComponent implements OnInit {
 
     @Output() armourSave = new EventEmitter<Armour>();
 
-    public armourUnset: boolean = false;
+    public armourUnset: boolean = true;
 
     public editing: boolean = false;
 
@@ -22,7 +22,7 @@ export class ArmourComponent implements OnInit {
 
     ngOnInit(): void {
         if (!this.armourSet) {
-            this.armourUnset = true;
+            this.armourUnset = false;
             this.armourSet = new Armour('', EquipmentQuality.Basic, EquipmentQuality.Basic, '');
         }
     }
@@ -70,9 +70,12 @@ export class ArmourComponent implements OnInit {
     }
 
     saveEdit(): void {
-        this.armourSave.emit(this.armourSet!);
-        this.armourUnset = false;
-        this.editing = false;
+        if (this.armourSet != null) {
+            this.armourSet.originalQuality = this.armourSet.currentQuality;
+            this.armourSave.emit(this.armourSet);
+            this.armourUnset = false;
+            this.editing = false;
+        }
     }
 
 }

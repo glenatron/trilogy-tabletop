@@ -1,8 +1,8 @@
 <div class="character-sheet" *ngIf="character != null">
     <div class="character-sheet-title component-header">
-	<h2 (click)="toggleOpen()">{{character.name}}</h2>
+	<button (click)="toggleOpen()">{{character.name}}</button>
     </div>
-    <modal-window [title]="character.name + ' character sheet'" [open]="open" >
+    <modal-window [title]="character.name + ' character sheet'" [open]="open" [width]="modalWidth()" [height]="modalHeight()" >
     <div class="character-sheet-content" *ngIf="open" >
 	<!-- arc / xp -->
 	<div class="character-top" >
@@ -17,16 +17,21 @@
 	    </li>
 	</ul>
 
-	<div class="stress-track" >
-	    <counter [counter]="character.stress.toStore()" (updated)="updateStress($event)" (value)="updateStressValue($event)" ></counter> 
-	</div>
+
 	<div class="character-harm-track" >
 	    <harm-track [track]="character.harm" (updated)="updateHarm($event)" (cleared)="clearHarm($event)" ></harm-track>
 	</div>
-	<div class="wealth-track" >
+	<div class="character-sheet-horizontal-split" >
+	<div class="stress-track horizontal-split" >
+	    <counter [counter]="character.stress.toStore()" (updated)="updateStress($event)" (value)="updateStressValue($event)" ></counter> 
+	</div>
+	<div class="wealth-track horizontal-split" >
 	    <counter [counter]="character.wealth.toStore()" (updated)="updateWealth($event)" (value)="updateWealthValue($event)" ></counter>
 	</div>
-	<div class="background character-history-block" >
+	<hr />
+	</div>
+	<div class="character-sheet-horizontal-split" >
+	<div class="background character-history-block horizontal-split" >
 	    <h4>Background: {{character.background.name}}</h4>
 	    <p *ngIf="editing">
 		<textarea id="character-background" name="character_background" [(ngModel)]="character.background" ></textarea>
@@ -35,7 +40,7 @@
 		{{character.background.description}}
 	    </p>
 	</div>
-	<div class="complication character-history-block" >
+	<div class="complication character-history-block horizontal-split" >
 	    <h4>Complication</h4>
 	    <p *ngIf="editing">
 		<textarea id="complication-text" name="complication_text" [(ngModel)]="character.background" ></textarea>
@@ -44,18 +49,44 @@
 		{{character.complication}}
 	    </p>
 	</div>
-	
+	</div>
 	<div class="equipment-wrapper" >
 	    <armour [armourSet]="character.armour" ></armour>
-	    <character-equipment [equipment]="character.equipment" ></character-equipment>
+	    <character-equipment [equipment]="character.equipment" (updateEquipment)="handleEquipmentUpdate" (removeEquipmpent)="handleEquipmentRemove" ></character-equipment>
 	</div>
 	<div class="moves" >
 	    <h3 class="moves-header">Moves</h3>
 	    <ul class="move-list" >
-		<li *ngFor="let mv of character.moves" >
+		<li
+		  *ngFor="let mv of character.moves"
+		  class="character-move" >
 		    <move [moveSummary]="mv.summary" (roll)="rollMove($event)"></move>
 		</li>
 	    </ul>
+	</div>
+	<div class="edit-button" *ngIf="!showTurningPointForm" >
+	    <button (click)="turningPoint()" *ngIf="turningPointReached" >Reached Turning Point</button>  <button (click)="toggleEdit()" >Edit</button>
+	</div>
+	<div class="Turning Point Form" *ngIf="showTurningPointForm" >
+	    <h3>What Turning Point have you reached?</h3>
+	    <select class="turning-point" (change)="changeSelectedTurningPoint($event)" >
+		<option *ngFor="let tp of availableTurningPoints()" >{{tp.title}}</option>
+	    </select>
+	    <p>You may add a new move from the list below or adjust your stats:</p>
+	    <select class="advanced-moves" (change)="changeShownMove($event)">
+		<option value="-">Optionally select a move...</option>
+		<option *ngFor="let mv of availableMoves()" >{{mv.name}}<option>
+	    </select>
+	    <div class="selected-move-details" *ngIf="turningPointMove != null" >
+		<p><strong>{{turningPointMove.name}}</strong></p>
+		<p><em>{{turningPointMove.trigger}}</em> <span *ngIf="turningPointMove.stat">roll plus {{turningPointMove.stat}}.</span></p>
+		<div class="move-fullSuccess" *ngIf="turningPointMove.fullSuccess != ''"><span class="success-label">On a 10+</span> <div [innerHtml]="turningPointMove.fullSuccess | safeHtml"></div></div>
+		<div class="move-intermediate" *ngIf="turningPointMove.intermediate != ''"><span class="intermediate-label">On a 7-9</span> <div [innerHtml]="turningPointMove.intermediate | safeHtml"></div></div>
+		<div class="move-failure" *ngIf="turningPointMove.failure != ''"><span class="failure-label">On a 6-</span><div [innerHtml]="turningPointMove.failure | safeHtml"></div></div>
+		<div class="move-notes"><div [innerHtml]="turningPointMove.notes | safeHtml"></div></div>
+
+	    </div>
+	    <div class="edit-button" ><button (click)="chooseTurningPoint()">TurningPoint selected</button></div>
 	</div>
     </div>
     </modal-window>

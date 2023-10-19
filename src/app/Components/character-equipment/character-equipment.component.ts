@@ -13,11 +13,15 @@ export class CharacterEquipmentComponent implements OnInit {
 
     @Output() updateEquipment = new EventEmitter<IEquipment>();
 
+    @Output() removeEquipment = new EventEmitter<IEquipment>();
+
     public localEquipment = new Array<Equipment>();
 
     public addFormOpen: boolean = false;
 
     public editEquipment: IEquipment = this.resetEditEquipment();
+
+    public ComponentEquipmentQuality = EquipmentQuality;
 
     constructor() {
 
@@ -27,6 +31,16 @@ export class CharacterEquipmentComponent implements OnInit {
         if (this.equipment != null) {
             this.localEquipment = this.equipment;
         }
+    }
+
+    public editItem(item: IEquipment): void {
+        this.editEquipment = item;
+        this.addFormOpen = true;
+    }
+
+    public removeItem(item: IEquipment): void {
+        this.removeEquipment.emit(item);
+        this.localEquipment = this.localEquipment.filter(x => x != item);
     }
 
     public clearAddForm() {
@@ -43,14 +57,25 @@ export class CharacterEquipmentComponent implements OnInit {
 
     public saveAddForm() {
         if (this.editEquipment.name.trim() != '') {
+            let idx = this.localEquipment.findIndex(x => x.id == this.editEquipment.id)
+            if (0 <= idx) {
+
+                this.localEquipment[idx] = Equipment.fromStore(this.editEquipment);
+
+            } else {
+                this.editEquipment.originalQuality = this.editEquipment.currentQuality;
+                this.localEquipment.push(Equipment.fromStore(this.editEquipment));
+            }
             this.updateEquipment.emit(this.editEquipment);
-            this.localEquipment.push(Equipment.fromStore(this.editEquipment));
-            this.editEquipment = this.resetEditEquipment();
         }
+        this.editEquipment = this.resetEditEquipment();
+        this.hideAddForm();
     }
+
 
     private resetEditEquipment(): IEquipment {
         return {
+            id: crypto.randomUUID(),
             name: "",
             originalQuality: EquipmentQuality.Basic,
             currentQuality: EquipmentQuality.Basic,

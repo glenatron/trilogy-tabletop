@@ -27,6 +27,8 @@ export class PlayerComponent implements OnInit {
 
     public characters = new Subject<Array<TrilogyCharacter>>();
 
+    public editCharacterId = "";
+
     constructor(public gameService: TrilogyGameService, public changeDetector: ChangeDetectorRef) {
         this.playerSummary = this.emptyPlayer();
         this.gameService.players.subscribe(players => {
@@ -81,7 +83,13 @@ export class PlayerComponent implements OnInit {
         if (this.player != null) {
             console.log("created I guess.");
             this.editing = false;
+            this.editCharacterId = "";
         }
+    }
+
+    public editCharacter(characterId: string) {
+        this.editCharacterId = characterId;
+        this.editing = true;
     }
 
     private emptyPlayer(): IPlayer {

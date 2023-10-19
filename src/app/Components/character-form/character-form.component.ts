@@ -34,6 +34,14 @@ export class CharacterFormComponent implements OnInit {
 
     public equipment = new Subject<Array<Equipment>>();
 
+    public editMove: IMoveSummary | null = null;
+
+    private editMoveName = "";
+
+    public open = true;
+
+    public titleText = "New Character";
+
     constructor(public gameService: TrilogyGameService) {
     }
 
@@ -47,10 +55,19 @@ export class CharacterFormComponent implements OnInit {
                         this.chosenArc = char.currentArc().summary;
                         this.chosenBackground = char.background;
                         this.step = 2;
+                        this.titleText = char.name;
                     }
                 }
             });
         }
+    }
+
+    public modalWidth(): number {
+        return Math.ceil(window.innerWidth * 0.75);
+    }
+
+    public modalHeight(): number {
+        return Math.ceil(window.innerHeight * 0.75);
     }
 
     public arcNames(): Array<string> {
@@ -74,12 +91,47 @@ export class CharacterFormComponent implements OnInit {
 
     }
 
+
+
+    public startEditMove(moveName: string) {
+        var found = this.character.customMoves.find(cm => cm.name == moveName);
+        if (found) {
+            this.editMove = found;
+            this.editMoveName = found.name;
+        } else {
+            this.editMove = this.emptyIMoveSummary();
+        }
+    }
+
+    public saveMove() {
+        const move = this.editMove!;
+        move.name = move.name.trim();
+        let moveAdded = false;
+        if (this.editMoveName != "") {
+            var foundIdx = this.character.customMoves.findIndex(x => x.name == this.editMoveName);
+            if (0 <= foundIdx) {
+                this.character.customMoves[foundIdx] = move;
+                moveAdded = true;
+            }
+        }
+        if (!moveAdded) {
+            this.character.customMoves.push(move);
+        }
+        this.cancelMoveEdit();
+    }
+
+    public cancelMoveEdit() {
+        this.editMove = null;
+        this.editMoveName = "";
+    }
+
     public saveAll() {
         this.character.background = this.chosenBackground;
         const charm = TrilogyCharacter.fromStore(this.character);
         charm.addArcByName(this.chosenArc.name);
         this.gameService.addCharacter(charm, this.playerId);
         this.done.emit(true);
+        this.open = false;
     }
 
     public addBackgroundMove(): void {
@@ -113,6 +165,18 @@ export class CharacterFormComponent implements OnInit {
     public saveEquipment(equipment: IEquipment) {
         this.character.equipment.push(equipment);
         this.equipment.next(this.character.equipment.map(x => Equipment.fromStore(x)));
+    }
+
+    public editableMoves(): Array<IMoveSummary> {
+        var result = this.character!.customMoves || [];
+        if (this.editMove != null) {
+            result = result.filter(x => x.name != this.editMove!.name);
+        }
+        return result;
+    }
+
+    public editMoveByName(name: string) {
+        this.editMove = this.editableMoves().find(x => x.name == name) || null;
     }
 
     private emptyICharacterArc(): IArcSummary {

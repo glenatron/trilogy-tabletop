@@ -1,5 +1,4 @@
 <div class="location-list">
-
     <ul class="locations" >
 	<li class="location" *ngFor="let location of liveLocations | async" >
 	    <h3 [ngClass]="{ 'location-title': true, 'title-selected': (currentLocation == location.name) }" (click)="locationDetail(location.name)" >{{location.name}}</h3>

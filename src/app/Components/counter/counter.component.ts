@@ -39,12 +39,16 @@ export class CounterComponent implements OnInit {
     }
 
     public getArray() {
-        return new Array<number>(this.counter.size).fill(0).map((n, idx) => idx + 1);
+        let a = new Array<number>(this.counter.size).fill(0).map((n, idx) => idx + 1);
+        return a;
     }
 
     public setValue(val: number) {
         if (val < 0 || this.counter.size < val) {
             throw "Setting counter value out of range: " + val + " is not in range 1 - " + this.counter.size;
+        }
+        if (this.counter.value == val) {
+            val--;
         }
         this.counter.value = val;
         this.value.emit(val);

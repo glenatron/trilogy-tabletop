@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostListener } from '@angular/core';
 
 @Component({
     selector: 'modal-window',
@@ -9,7 +9,19 @@ export class ModalWindowComponent implements OnInit {
 
     @Input() title: string = "Modal";
 
-    @Input() public open = false;
+    @Input() public set open(value: boolean) {
+        if (value) {
+            this.ensureNotOversized();
+        }
+        this._open = value;
+    }
+    public get open(): boolean {
+        return this._open;
+    }
+
+    @Input() public width = 100;
+
+    @Input() public height = 100;
 
     public left = 100;
 
@@ -19,13 +31,11 @@ export class ModalWindowComponent implements OnInit {
 
     public bottom = 200;
 
-    public width = 100;
-
-    public height = 100;
-
     public maximised = true;
 
     public minimised = false;
+
+    private _open = false;
 
     private dragSection = DragSection.None;
 
@@ -41,6 +51,8 @@ export class ModalWindowComponent implements OnInit {
 
     private stashedY = 0;
 
+    private dragging = false;
+
     private lastMaxSize: boxSize = { top: 10, left: 10, width: 100, height: 100 };
 
     constructor() {
@@ -48,7 +60,6 @@ export class ModalWindowComponent implements OnInit {
         this.top = Math.floor(window.innerHeight / 4);
         this.right = Math.floor(window.innerWidth / 2);
         this.bottom = Math.floor(window.innerHeight / 2);
-        this.calculateSize();
     }
 
     ngOnInit(): void {
@@ -56,7 +67,7 @@ export class ModalWindowComponent implements OnInit {
 
     public toggleMinimise(): void {
         if (this.maximised) {
-            this.removeDragListeners();
+            this.dragging = false;
             this.stashSize();
             this.width = 200;
         }
@@ -74,7 +85,7 @@ export class ModalWindowComponent implements OnInit {
 
     public closeModal(): void {
         this.open = false;
-        this.removeDragListeners();
+        this.dragging = false;
     }
 
     public startTopDrag(event: MouseEvent) {
@@ -102,80 +113,122 @@ export class ModalWindowComponent implements OnInit {
         this.startDragEvent();
     }
 
+    public startDragEvent() {
+        this.dragging = true;
+    }
+
+    @HostListener("window:mouseleave", ["$event"])
+    @HostListener("window:mouseup", ["$event"])
     public clearDragEvent(event: MouseEvent): void {
-        this.lastX = 0;
-        this.lastY = 0;
-        this.dragSection = DragSection.None;
-        this.removeDragListeners();
-    }
-
-    private removeDragListeners() {
-        window.removeEventListener("mousemove", (ev) => this.dragEvent(ev));
-        document.removeEventListener("mouseleave", (ev) => this.clearDragEvent(ev));
-        window.removeEventListener("mouseup", (ev) => this.clearDragEvent(ev));
-    }
-
-    private startDragEvent() {
-        window.addEventListener("mousemove", (ev) => this.dragEvent(ev));
-        window.addEventListener("mouseup", (ev) => this.clearDragEvent(ev));
-        document.addEventListener("mouseleave", ev => this.clearDragEvent(ev));
-    }
-
-    private dragEvent(event: MouseEvent): void {
-        switch (this.dragSection) {
-            case DragSection.Left: this.left = event.x;
-                this.calculateSize();
-                if (this.width < (this.minWidth)) {
-                    this.right = this.left + this.minWidth;
-                }
-                break;
-            case DragSection.Right: this.right = event.x;
-                this.calculateSize();
-                if (this.width < this.minWidth) {
-                    this.left = this.right - this.minWidth;
-                }
-                break;
-            case DragSection.Bottom: this.bottom = event.y;
-                this.calculateSize();
-                if (this.height < this.minHeight) {
-                    this.top = this.bottom - this.minHeight;
-                    if (this.top < 0) {
-                        this.bottom = this.minHeight;
-                    }
-                }
-                break;
-            case DragSection.Corner:
-                this.right = event.x;
-                this.bottom = event.y;
-                this.calculateSize();
-                if (this.width < (this.minWidth)) {
-                    this.right = this.left + this.minWidth;
-                }
-                if (this.height < this.minHeight) {
-                    this.top = this.bottom - this.minHeight;
-                    if (this.top < 0) {
-                        this.bottom = this.minHeight;
-                    }
-                }
-                break;
-            case DragSection.Top:
-                this.top = event.y;
-                if (0 < this.lastX) {
-                    this.left = this.left + (event.x - this.lastX);
-                }
-                this.bottom = this.top + this.height;
-                this.right = this.left + this.width;
-                break;
-            default:
-                console.log("Drag event raised when no drag in progress!");
-                break;
+        console.log("Clear drag (if dragging - " + this.dragging + ") " + event.type);
+        if (this.dragging) {
+            this.lastX = 0;
+            this.lastY = 0;
+            this.dragSection = DragSection.None;
+            this.dragging = false;
         }
-        this.lastX = event.x;
-        this.lastY = event.y;
 
     }
 
+    @HostListener("window:mousemove", ["$event"])
+    public dragEvent(event: MouseEvent): void {
+        if (this.dragging) {
+            console.log("Dragging mousemove...");
+            switch (this.dragSection) {
+                case DragSection.Left: this.left = event.x;
+                    this.calculateSize();
+                    if (this.width < (this.minWidth)) {
+                        this.right = this.left + this.minWidth;
+                    }
+                    break;
+                case DragSection.Right: this.right = event.x;
+                    this.calculateSize();
+                    if (this.width < this.minWidth) {
+                        this.left = this.right - this.minWidth;
+                    }
+                    break;
+                case DragSection.Bottom: this.bottom = event.y;
+                    this.calculateSize();
+                    if (this.height < this.minHeight) {
+                        this.top = this.bottom - this.minHeight;
+                        if (this.top < 0) {
+                            this.bottom = this.minHeight;
+                        }
+                    }
+                    break;
+                case DragSection.Corner:
+                    this.right = event.x;
+                    this.bottom = event.y;
+                    this.calculateSize();
+                    if (this.width < (this.minWidth)) {
+                        this.right = this.left + this.minWidth;
+                    }
+                    if (this.height < this.minHeight) {
+                        this.top = this.bottom - this.minHeight;
+                        if (this.top < 0) {
+                            this.bottom = this.minHeight;
+                        }
+                    }
+                    break;
+                case DragSection.Top:
+                    this.top = event.y;
+                    if (0 < this.lastX) {
+                        this.left = this.left + (event.x - this.lastX);
+                    }
+                    this.bottom = this.top + this.height;
+                    this.right = this.left + this.width;
+                    break;
+                default:
+                    console.log("Drag event raised when no drag in progress!");
+                    this.dragging = false;
+                    break;
+            }
+            this.lastX = event.x;
+            this.lastY = event.y;
+        }
+    }
 
+    public endDragEvent() {
+        if (this.dragging) {
+            this.dragging = false;
+        }
+    }
+
+    private ensureNotOversized() {
+        if (this.width != 100 || this.height != 100) {
+            if (window.innerWidth < this.width) {
+                this.width = window.innerWidth;
+            }
+            if (window.innerHeight < this.height) {
+                this.height = window.innerHeight;
+            }
+            this.right = this.left + this.width;
+            this.bottom = this.top + this.height;
+            if (window.innerWidth < this.right) {
+                let newLeft = window.innerWidth - this.width;
+                if (0 < newLeft) {
+                    newLeft = Math.floor(newLeft / 2);
+                } else {
+                    newLeft = 0;
+                }
+                this.left = newLeft;
+            }
+            if (window.innerHeight < this.bottom) {
+                let newTop = window.innerHeight - this.width;
+                if (0 < newTop) {
+                    newTop = Math.floor(newTop / 2);
+                } else {
+                    newTop = 0;
+                }
+                this.top = newTop;
+            }
+            this.stashSize();
+
+        } else {
+            this.calculateSize();
+        }
+
+    }
 
     private calculateSize(): void {
         this.width = this.right - this.left;

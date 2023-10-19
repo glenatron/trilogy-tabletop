@@ -1,4 +1,4 @@
-<div class="armour-component" *ngIf="armourUnset">
+<div class="armour-component" *ngIf="!armourUnset">
     <h3>Armour: {{armourSet!.name}} ({{armourSet!.getQualityName()}})</h3>
     <span class="armour-uses-row" >
     <counter [counter]="armourSet!.uses.toStore()" (updated)="armourUsed($event)" (value)="updateArmourValue($event)" ></counter> 
@@ -9,7 +9,10 @@
 	{{armourSet!.notes}}
     </span>
 </div>
-<div class="add-armour" *ngIf="armourUnset || editing" >
+<div class="armour-missing" *ngIf="armourUnset" >
+    <button class="btn add-armour" (click)="showEdit()">Add Armour</button>
+</div>
+<div class="add-armour equipment-form-container" *ngIf="editing" >
     <div class="equipment-form" >
 	<label for="armour-name" >
 	    Name

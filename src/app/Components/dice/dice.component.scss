@@ -59,6 +59,7 @@ ul.modifier {
     font-size: 0.6em;
     height: 1em;
     padding-right: 2em;
+    align-items: center;
 }
 ul.modifier li.modifier-literal {
     display: flex;
@@ -70,9 +71,9 @@ ul.modifier li.modifier-literal {
 }
 span.modifier-value {
     font-size: 3.5em;
-    padding-left: 1em;
-    padding-right: 1em;
-    margin-top: -0.4em;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+    margin-top: -0.2em;
 }
 li.modifier-literal .btn {
     padding: 0em 0.25em 0em 0.25em;
