@@ -65,6 +65,14 @@ textarea {
     font-size: 1.2em;
     font-family: monaco, monospace;
 }
+select {
+    border: 1px solid var(--gold);
+    font-weight: bold;
+  font-size: 1em;
+  padding: 0.2em;
+  background-color: var(--dark-leather);
+  color: var(--gold);
+}
 .component-header {
     display: flex;
     flex-direction: row;
@@ -155,7 +163,6 @@ button.btn-toggle {
 	}
 }
 .arc-container {
-    margin-top: -1em;
     font-family: arial;
     font-size: 0.8em;
     display: flex;
@@ -247,6 +254,20 @@ ul .harm-track {
 .update-harm {
     min-width: 20%;
 }
+ul .custom-counters-list  {
+  list-style-type: none;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  column-gap: 1em;
+  margin-top: 1em;
+}
+.custom-counters-list li {
+    width: 50%;
+}
+.two-way-counter-title {
+    padding: 0.5em 0.5em 1em 1em;
+}
 .character-sheet-horizontal-split {
     display: flex;
     flex-direction: row;
@@ -255,24 +276,55 @@ ul .harm-track {
 .horizontal-split {
     width: 50%;
 }
+.armour-component {
+    margin-top: 0.5em;
+  border: 1px solid black;
+  padding: 0 0 1em 1em;
+}
+.armour-uses-row {
+    display: flex;
+    flex-direction: row;
+}
 .equipment-wrapper {
     width: 100%;
 }
 .equipment-list {
     list-style-type: none;
 }
+.equipment-list li {
+    margin-bottom: 1em;
+    display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+}
+equipment-item {
+    flex: 3;
+}
 .equipment {
     display: grid;
+    flex: 3;
+    grid-template-columns: 30% 20% 50%;
 }
 .equipment .name {
     grid-column: 1;
 }
 .equipment .quality {
     grid-column: 2;
-    width: 20%;
 }
 .equipment .notes {
     grid-column: 3;
+}
+.equipment-controls {
+    display: flex;
+  flex-direction: row;
+}
+.equipment-controls .btn {
+	font-size: 1vh;
+    }
+
+.equipment-list .controls {
+    margin-top: 2em;
 }
 .equipment-form-container{
   padding: 1em;
@@ -320,6 +372,10 @@ list-style-type: none;
   flex-direction: row;
   padding-left: 0;
 }
+character-form textarea {
+  clear: both;
+  display: block;
+}
 .form-group-horizontal {
     display: flex;
     flex-direction: row;
@@ -352,7 +408,9 @@ list-style-type: none;
     flex-direction: column;
 }
 .modal-title {
-    border: 1px solid black;
+    background-color: var(--gold);
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -361,7 +419,7 @@ list-style-type: none;
 .modal-title h4 {
     align-self: flex-end;
     flex: fit-content;
-    padding-left:1em;
+   padding-left:1em;
     padding-bottom: 0.5em;
     padding-right: 0.5em;
     margin: 0;
@@ -413,13 +471,12 @@ list-style-type: none;
     padding: 1em;
 }
 #minimised-modal-bar {
-    position: absolute;
+    position: fixed;
     bottom: 0px;
     padding-bottom: 0.5em;
     padding-left: 0.1em;
     padding-right: 0.1em;
     height: 2em;
-    background-color: aliceblue;
     width: 100%;
     z-index: 0;
 }

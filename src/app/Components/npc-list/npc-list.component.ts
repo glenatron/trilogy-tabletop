@@ -19,6 +19,7 @@ export class NpcListComponent implements OnInit {
         gameService.npcs.subscribe(newNpcs => {
             this.npcs = newNpcs;
             this.creating = false;
+            this.liveNPCs.next(this.npcs);
         });
     }
 

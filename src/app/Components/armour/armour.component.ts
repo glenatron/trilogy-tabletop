@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnChanges, SimpleChanges, Input, Output, EventEmitter } from '@angular/core';
 import { Armour } from '../../../../../../trilogy-core/src/Character/Armour';
 import { IStoredCounter } from '../../../../../../trilogy-core/src/Character/Counter';
 import { EquipmentQuality } from '../../../../../../trilogy-core/src/Character/IEquipment';
@@ -8,7 +8,7 @@ import { EquipmentQuality } from '../../../../../../trilogy-core/src/Character/I
     templateUrl: './armour.component.html',
     styleUrls: ['./armour.component.scss']
 })
-export class ArmourComponent implements OnInit {
+export class ArmourComponent implements OnChanges {
 
     @Input() armourSet: Armour | null = null;
 
@@ -18,12 +18,16 @@ export class ArmourComponent implements OnInit {
 
     public editing: boolean = false;
 
+    public EquipmentQualityName = EquipmentQuality;
+
     constructor() { }
 
-    ngOnInit(): void {
-        if (!this.armourSet) {
+    ngOnChanges(changes: SimpleChanges): void {
+        if (this.armourSet) {
             this.armourUnset = false;
-            this.armourSet = new Armour('', EquipmentQuality.Basic, EquipmentQuality.Basic, '');
+        } else {
+            this.armourUnset = true;
+            this.createArmourIfEmpty();
         }
     }
 
@@ -58,15 +62,20 @@ export class ArmourComponent implements OnInit {
         this.armourSet!.reduceQuality();
     }
 
+    remove() {
+        this.armourUnset = true;
+        this.cancelEdit();
+        this.armourSave.emit(this.armourSet!);
+    }
+
     showEdit(): void {
+        this.createArmourIfEmpty();
         this.editing = true;
     }
 
     cancelEdit(): void {
         this.editing = false;
-        if (this.armourUnset) {
-            this.armourSet = new Armour('', EquipmentQuality.Basic, EquipmentQuality.Basic, '');
-        }
+        this.createArmourIfEmpty();
     }
 
     saveEdit(): void {
@@ -75,6 +84,12 @@ export class ArmourComponent implements OnInit {
             this.armourSave.emit(this.armourSet);
             this.armourUnset = false;
             this.editing = false;
+        }
+    }
+
+    private createArmourIfEmpty(): void {
+        if (this.armourUnset) {
+            this.armourSet = new Armour('', EquipmentQuality.Basic, EquipmentQuality.Basic, '');
         }
     }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, HostListener } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
 
 @Component({
     selector: 'modal-window',
@@ -11,7 +11,9 @@ export class ModalWindowComponent implements OnInit {
 
     @Input() public set open(value: boolean) {
         if (value) {
-            this.ensureNotOversized();
+            if (this.dimensions == null) {
+                this.ensureNotOversized();
+            }
         }
         this._open = value;
     }
@@ -22,6 +24,16 @@ export class ModalWindowComponent implements OnInit {
     @Input() public width = 100;
 
     @Input() public height = 100;
+
+    @Input() public set dimensions(value: BoxSize | null) {
+        if (value != null) {
+            this.lastMaxSize = value;
+            this.recoverSize();
+        }
+    }
+
+
+    @Output() public closed = new EventEmitter<boolean>();
 
     public left = 100;
 
@@ -53,7 +65,7 @@ export class ModalWindowComponent implements OnInit {
 
     private dragging = false;
 
-    private lastMaxSize: boxSize = { top: 10, left: 10, width: 100, height: 100 };
+    private lastMaxSize: BoxSize = { top: 10, left: 10, width: 100, height: 100 };
 
     constructor() {
         this.left = Math.floor(window.innerWidth / 4);
@@ -81,11 +93,20 @@ export class ModalWindowComponent implements OnInit {
 
     public openModal(): void {
         this.open = true;
+        if (this.dimensions) {
+            this.lastMaxSize = this.dimensions;
+            this.recoverSize();
+        }
     }
 
     public closeModal(): void {
         this.open = false;
         this.dragging = false;
+        this.closed.emit(true);
+    }
+
+    public getSize(): BoxSize {
+        return this.lastMaxSize;
     }
 
     public startTopDrag(event: MouseEvent) {
@@ -290,10 +311,9 @@ enum DragSection {
     Top, Bottom, Left, Right, Corner, None
 }
 
-interface boxSize {
+export interface BoxSize {
     top: number;
     left: number;
     width: number;
     height: number;
-
 }

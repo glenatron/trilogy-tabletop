@@ -1,10 +1,18 @@
-<modal-window [title]="'New Character'" [open]="open" [width]="modalWidth()" [height]="modalHeight()" >
+<modal-window [title]="titleText" [open]="open" [width]="modalWidth()" [height]="modalHeight()" [dimensions]="modalSize" >
 <div class="character-form pop-up-form" >
     <h2>{{titleText}}</h2>
     <div class="step step-0" *ngIf="0 <= step" >
 	<p>
 	    <label for="name-box" >Name</label>
 	    <input type="text" id="name-box" name="name_box" [(ngModel)]="character.name" />
+	</p>
+	<p>
+	    <label for="pronouns-box" >Pronouns</label>
+	    <input type="text" id="pronouns-box" name="pronouns_box" [(ngModel)]="character.pronouns" />
+	</p>
+	<p>
+	    <label for="look-box" >Look</label>
+	    <textarea id="look-box" name="look_box" [(ngModel)]="character.look" ></textarea>
 	</p>
 	<p>
 	    <label for="arc-dropdown" >Arc</label>
@@ -25,7 +33,22 @@
 		</label>
 		<input type="number" name="stat_{{statName(stat.name)}}" id="stat-{{statName(stat.name)}}" [(ngModel)]="stat.modifier" min="-1" max="2" />
 	    </li>
+	    <li class="single-stat" *ngFor="let stat of character.customStats" >
+		<label for="stat_{{statName(stat.name)}}" >
+		    {{stat.name}} 
+		</label>
+		<div class="stat-removal-button">
+		    <button class="btn btn-small" (click)="removeCustomStat(statName(stat.name))">X</button>
+		</div>
+		<input type="number" name="stat_{{statName(stat.name)}}" id="stat-{{statName(stat.name)}}" [(ngModel)]="stat.modifier" min="-1" max="2" />
+	    </li>
 	</ul>
+	<div class="add-custom-stat">
+	    <div class="character-form-warning" *ngIf="0 < customStatWarning.length">{{customStatWarning}}</div>
+	    <label for="add-custom-stat">Custom stat name:</label>
+	    <input type="text" id="custom-stat-name" [(ngModel)]="customStatName" />
+	    <button (click)="addCustomStat()" >Add</button>
+	</div>
 	<h3>History</h3>
 	<div class="background" >
 	    <p>
@@ -59,11 +82,62 @@
 	<p *ngIf="step == 1">
 	    <button class="btn save-button" (click)="saveStep1()">Save</button>
 	</p>
-
+    </div>
+    <div class="step step-2" *ngIf="2 <= step">	
+	<h3>Custom counters</h3>
+	<ul class="custom-counter-list" *ngIf="0 < character.customCounters.length">
+	    <li *ngFor="let count of character.customCounters" >
+		<div class="counter-overview" >
+		<span class="counter-name" >{{count.name}}</span>
+	        <span class="counter-size" > {{count.size}} point counter</span>
+		<button class="btn btn-small" (click)="removeCustomCounter(count.name)" >Remove</button>
+		</div>
+		<div class="counter-description" >
+		    {{count.description}}
+		</div>
+	    </li>
+	</ul>
+	<div class="custom-counter-form" >
+	    <div>Add custom counter:</div>
+	    <div *ngIf="0 < customCounterWarning.length" class="character-form-warning" >
+		{{customCounterWarning}}
+	    </div>
+	    <div>
+		<label for="custom-counter-name" >
+		    Name:
+		</label>
+		<input type="text" id="custom-counter-name" [(ngModel)]="customCounter.name" />
+	    </div>
+	    <div>
+		<label for="custom-counter-size" >
+		    Size:
+		</label>
+		<input type="text" id="custom-counter-size" [(ngModel)]="customCounter.size"  />
+	    </div>
+	    <div>
+		<label for="custom-counter-description" >
+		    Description:
+		</label>
+		<textarea id="custom-counter-description" [(ngModel)]="customCounter.description" ></textarea>
+	    </div>
+	    <div><button class="btn" (click)="addCustomCounter()" >Add One-way Counter</button><button class="btn" (click)="showTwoWayCounterEditor()" >Add Two Way Counter</button></div>
+	</div>
+	<ul class="custom-counter-list"   >
+	    <li *ngFor="let counter of character.customTwoWayCounters">
+		<two-way-counter [counter]="counter" [showEdit]="true" (updated)="updateTwoWayCounter($event)"></two-way-counter>
+		<button class="btn" (click)="removeCustomCounter(counter.name)" >Remove</button>
+	    </li>
+	    <li *ngIf="addTwoWayCounter" >
+		<div *ngIf="0 < twoWayCounterWarning.length"  class="character-form-warning" >
+		    {{twoWayCounterWarning}}
+		</div>
+		<two-way-counter [showEdit]="true" (updated)="updateTwoWayCounter($event)" ></two-way-counter>
+	    </li>
+	</ul>
     </div>
     <div class="step step-2" *ngIf="2 <= step">
 	<h3>Equipment</h3>
-	<armour [armourSet]="armour()" (armourSave)="saveArmour($event)" ></armour>
+	<armour [armourSet]="armour | async" (armourSave)="saveArmour($event)" ></armour>
 	<character-equipment [equipment]="equipment | async" (updateEquipment)="saveEquipment($event)" ></character-equipment>
 	<p>
 	    <button class="btn save-button" (click)="saveAll()">Save</button>
@@ -79,6 +153,7 @@
 		<a (click)="editMoveByName(move.name)">{{move!.name}}</a>
 	    </li>
 	</ul>
+
 
     </div>
     

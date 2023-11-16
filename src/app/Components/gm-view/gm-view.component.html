@@ -30,17 +30,18 @@
 		    <chat [playerId]="playerId" ></chat>
 		</div>
 
+
+	    </div>
+	    <div class="game-footer" >
 		<div class="gm-options" >
-		    <modal-window [title]="'Location: '+(openLocation?.name || '')" [open]="openLocation != null"
-		         [width]="800" [height]="600">
+		    <modal-window [title]="'Location: '+(openLocation?.name || '')" [open]="showLocationModal"
+				  [width]="800" [height]="600" (closed)="gmOptionsClosed()">
 			<location
 			  [gmView]="true"
 			  [location]="openLocation"
 			  (created)="closeLocation()"></location>
 		    </modal-window>
-	       </div>
-	    </div>
-	    <div class="game-footer" >
+		</div>
 	    </div>
 	</div>
  

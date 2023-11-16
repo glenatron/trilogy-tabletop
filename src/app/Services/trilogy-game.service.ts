@@ -108,7 +108,14 @@ export class TrilogyGameService {
             } else {
                 this.gameInPlay.npcs.push(newNPC);
             }
-            this.game.next(this.gameInPlay);
+            this.updateGame();
+        }
+    }
+
+    public removeNPC(id: string): void {
+        if (this.gameInPlay) {
+            this.gameInPlay.npcs = this.gameInPlay.npcs.filter(x => x.id != id);
+            this.updateGame();
         }
     }
 

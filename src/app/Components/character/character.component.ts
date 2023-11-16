@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { TrilogyGameService } from '../../Services/trilogy-game.service';
 import { IStatistic } from '../../../../../../trilogy-core/src/Character/IStatistic';
 import { Counter, IStoredCounter } from '../../../../../../trilogy-core/src/Character/Counter';
@@ -12,6 +13,8 @@ import { CharacterArc } from '../../../../../../trilogy-core/src/Character/Chara
 import { ITurningPoint, IArcSummary } from '../../../../../../trilogy-core/src/Character/IArcSummary';
 import { IEquipment } from '../../../../../../trilogy-core/src/Character/IEquipment';
 import { Equipment } from '../../../../../../trilogy-core/src/Character/Equipment';
+import { Armour } from '../../../../../../trilogy-core/src/Character/Armour';
+import { BoxSize, ModalWindowComponent } from '../modal-window/modal-window.component';
 
 @Component({
     selector: 'character',
@@ -22,7 +25,11 @@ export class CharacterComponent implements OnInit {
 
     @Input() id: string = '';
 
-    @Output() triggerEdit = new EventEmitter();
+    @Output() triggerEdit = new EventEmitter<BoxSize>();
+
+    @Input() modalSize: BoxSize | null = null;
+
+    @ViewChild(ModalWindowComponent) modalWindow!: ModalWindowComponent;
 
     public character: TrilogyCharacter | null = null;
 
@@ -38,6 +45,10 @@ export class CharacterComponent implements OnInit {
 
     public turningPointMove: IMoveSummary | null = null;
 
+    public characterArmour = new BehaviorSubject<Armour | null>(null);
+
+    private notesRequireSave = false;
+
     constructor(public gameService: TrilogyGameService) {
 
     }
@@ -52,6 +63,8 @@ export class CharacterComponent implements OnInit {
                 }
                 if (this.character == null) {
                     this.character = TrilogyCharacter.emptyCharacter();
+                } else {
+                    this.characterArmour.next(this.character.armour);
                 }
             });
         }
@@ -66,24 +79,33 @@ export class CharacterComponent implements OnInit {
     }
 
     public toggleEdit(): void {
+        var size = this.modalWindow.getSize();
         this.open = false;
-        this.triggerEdit.emit();
+        this.triggerEdit.emit(size);
     }
 
     public toggleOpen(): void {
+        if (this.notesRequireSave) {
+            this.characterUpdated();
+        }
         this.open = !this.open;
     }
 
-    public rollStat(stat: DicePool): void {
-        this.gameService.roll(stat);
+    public rollStat(stat: DicePool, statName: string): void {
+        this.gameService.roll(stat, this.character!.name, statName);
     }
 
     public statUpdated(stat: IStatistic): void {
-        const statIndex = this.character!.stats.findIndex(x => x.name == stat.name);
+        let statIndex = this.character!.stats.findIndex(x => x.name == stat.name);
         if (0 <= statIndex) {
             this.character!.stats[statIndex] = stat;
         } else {
-            this.character!.stats.push(stat);
+            statIndex = this.character!.customStats.findIndex(x => x.name == stat.name);
+            if (0 <= statIndex) {
+                this.character!.customStats[statIndex] = stat;
+            } else {
+                this.character!.customStats.push(stat);
+            }
         }
         this.characterUpdated();
     }
@@ -130,10 +152,22 @@ export class CharacterComponent implements OnInit {
         this.characterUpdated();
     }
 
+    public twoWayCounterChanged(counterValue: [string, number]) {
+        this.character!.updateTwoWayCounter(counterValue[0], counterValue[1]);
+    }
+
+    public saveArmour(newArmour: Armour): void {
+        if (newArmour.name.trim() == "") {
+            this.character!.armour = null;
+        } else {
+            this.character!.armour = newArmour;
+        }
+        this.characterArmour.next(this.character!.armour);
+    }
+
     public turningPoint() {
         this.showTurningPointForm = true;
     }
-
 
     public availableTurningPoints(): Array<ITurningPoint> {
         let arc = this.character!.currentArc();
@@ -203,6 +237,14 @@ export class CharacterComponent implements OnInit {
             }
             this.character.equipment = equipment;
         }
+    }
+
+    public notesUpdated() {
+        this.notesRequireSave = true;
+    }
+
+    public arcNotesUpdated(ev: Event) {
+
     }
 
     private characterUpdated(): void {

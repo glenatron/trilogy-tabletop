@@ -28,7 +28,7 @@ export class GmViewComponent implements OnInit {
 
     public playerId = '';
 
-    public openModal = false;
+    public showLocationModal = false;
 
     constructor(public gameService: TrilogyGameService) {
         this.game = new Game(null);
@@ -60,21 +60,20 @@ export class GmViewComponent implements OnInit {
 
     public showLocation(loc: Location): void {
         this.openLocation = loc;
+        this.showLocationModal = true;
     }
 
     public closeLocation(): void {
         this.openLocation = null;
+        this.showLocationModal = false;
+    }
+    public gmOptionsClosed(): void {
+        this.closeLocation();
     }
 
     public notifyRoll(roll: ICharacterRoll): void {
         this.gameService.rollNotification(this.playerId, roll);
     }
-
-    public openModalWindow(): void {
-        this.openModal = true;
-    }
-
-
 
 }
 

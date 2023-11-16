@@ -1,0 +1,18 @@
+.counter-title {
+    font-weight: bold;
+    float: left;
+}
+ul.counter-list {
+    list-style-type: none;
+    display: inline;
+    display: flex;
+    flex-direction: row;
+}
+ul.counter-list li {
+    width: 2em;
+    height: 1em;
+    border: 1px solid black;
+}
+ul.counter-list .filled {
+    background-color: black;
+}

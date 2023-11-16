@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { TrilogyGameService } from '../../Services/trilogy-game.service';
 import { Player, IPlayer } from '../../../../../../trilogy-core/src/Player';
 import { TrilogyCharacter } from '../../../../../../trilogy-core/src/Character/TrilogyCharacter';
+import { BoxSize } from '../modal-window/modal-window.component';
 
 @Component({
     selector: 'player',
@@ -14,6 +15,8 @@ export class PlayerComponent implements OnInit {
     @Input() id: string = '';
 
     @Input() gmView: boolean = false;
+
+    public modalSize: BoxSize | null = null;
 
     public playerSummary: IPlayer;
 
@@ -79,16 +82,18 @@ export class PlayerComponent implements OnInit {
         }
     }
 
-    public characterCreated(made: boolean): void {
+    public characterCreated(size: BoxSize): void {
         if (this.player != null) {
             console.log("created I guess.");
             this.editing = false;
             this.editCharacterId = "";
+            this.modalSize = size;
         }
     }
 
-    public editCharacter(characterId: string) {
+    public editCharacter(characterId: string, boxSize: BoxSize) {
         this.editCharacterId = characterId;
+        this.modalSize = boxSize;
         this.editing = true;
     }
 

@@ -1,63 +1,78 @@
-<div class="npc-container" >
-    <div class="npc-title component-header">
-	<h2  *ngIf="!editing">{{npc.name}}</h2>
-	<h2 *ngIf="editing">
-	  <label for="npc-name">Name:</label>
-	    <input type="text" id="npc-name" name="npc_name" [(ngModel)]="npc.name" />
-	</h2>
-	<span class="toggle" *ngIf="!editing" >
-	    <button (click)="toggleOpen()" class="btn-toggle btn-toggle-open" *ngIf="open" >v</button>
-	    <button (click)="toggleOpen()" class="btn-toggle btn-toggle-closed" *ngIf="!open" ><</button>
-	</span>
-    </div>
-    <div class="npc-sheet-content" *ngIf="open" >
-	<div class="npc-player"  *ngIf="!editing">
-	    <div class="description">
-		<p >{{npc.description}}</p>
-	    </div>
-	    <div class="attribute-container">
-		<span class="attribute-title">Need: </span>
-		<span class="attribute-text">{{npc.need}}</span>
-	    </div>
-	</div>
-        <div class="npc-player" *ngIf="editing"  >
-	  <label for="npc-description">Description</label>
-	    <div class="description">
-		<textarea id="npc-description" name="npc_description" class="npc-description description-field" [(ngModel)]="npc.description"></textarea>
-	    </div>
-	    <div class="one-line-attribute-container">
-		<label for="need-line" >Need: </label>
-		<input type="text" class="one-line-text" [(ngModel)]="npc.need" />
-	    </div>
-	</div>
-	<div class="npc-gm" >
-	    <div class="stress-track" >
-		<counter [counter]="npc.resilience.toStore()" (updated)="updateResilience($event)" (value)="updateResilienceValue($event)" ></counter> 
-	    </div>
-	    <div class="show-players">
-		<input type="checkbox" id="show-players" [(ngModel)]="npc.showPlayers" name="show_players" />
-		<label for="show-players">Visible to players</label>
-	    </div>
-	</div>
-	<div class="npc-gm" *ngIf="editing">
-	    <div class="gm-notes">
-		<label for="gm-notes">GM Notes</label>
-		<textarea id="gm-notes" class="gm-notes-field" [(ngModel)]="npc.GMNotes" ></textarea>
-	    </div>
-	    
-	    <div class="save-npc">
-		<button class="save-btn btn" (click)="updateNPC()" >Save</button>
-		<button class="cancel-btn btn" (click)="resetNPC()">Cancel</button>
-	    </div>
-	</div>
-        <div class="npc-gm" *ngIf="!editing" >
-	    <div class="gm-notes">
 
-	      <p>{{npc.GMNotes}}</p>
+<div class="npc-container" >
+    <div class="npc-name" (click)="toggleOpen()">
+	<h3 class="npc-title">{{npc.name}}</h3>
+    </div>
+    <modal-window [title]="'NPC: '+npc.name" [open]="open" [width]="800" [height]="600" (close)="toggleOpen()" >
+	<div class="npc-title component-header">
+	    <h2  *ngIf="!editing">{{npc.name}} ( {{npc.pronouns}} )</h2>
+	    <h2 *ngIf="editing">
+		<label for="npc-name">Name:</label>
+		<input type="text" id="npc-name" name="npc_name" [(ngModel)]="npc.name" />
+	    </h2>
+	</div>
+	<div class="npc-sheet-content" *ngIf="open" >
+	    <div class="npc-player"  *ngIf="!editing">
+		<div class="appearance">
+		    <p>Look: {{npc.appearance}}</p>
+		</div>
+		<div class="description">
+		    <p >{{npc.description}}</p>
+		</div>
+		<div class="attribute-container">
+		    <span class="attribute-title">Need: </span>
+		    <span class="attribute-text">{{npc.need}}</span>
+		</div>
 	    </div>
-	    <div class="save-npc">
-		<button class="save-btn btn" (click)="startEdit()" >Edit</button>
+            <div class="npc-player" *ngIf="editing"  >
+		<p>
+		    <label for="pronouns-box" >Pronouns</label>
+		    <input type="text" id="pronouns-box" name="pronouns_box" [(ngModel)]="npc.pronouns" />
+		</p>
+		<p>
+		    <label for="look-box" >Look</label>
+		    <textarea id="look-box" name="look_box" [(ngModel)]="npc.appearance" ></textarea>
+		</p>
+		<p>
+		<label for="npc-description">Description</label>
+		    <textarea id="npc-description" name="npc_description" class="npc-description description-field" [(ngModel)]="npc.description"></textarea>
+		</p>
+		<p class="one-line-attribute-container">
+		    <label for="need-line" >Need: </label>
+		    <input type="text" class="one-line-text" [(ngModel)]="npc.need" />
+
+		</p>
+	    </div>
+	    <div class="npc-gm" >
+		<div class="stress-track" >
+		    <counter [counter]="npc.resilience.toStore()" (updated)="updateResilience($event)" (value)="updateResilienceValue($event)" ></counter> 
+		</div>
+		<div class="show-players">
+		    <input type="checkbox" id="show-players" [(ngModel)]="npc.showPlayers" name="show_players" />
+		    <label for="show-players">Visible to players</label>
+		</div>
+	    </div>
+	    <div class="npc-gm" *ngIf="editing">
+		<div class="gm-notes">
+		    <label for="gm-notes">GM Notes</label>
+		    <textarea id="gm-notes" class="gm-notes-field" [(ngModel)]="npc.GMNotes" ></textarea>
+		</div>
+		
+		<div class="save-npc">
+		    <button class="save-btn btn" (click)="updateNPC()" >Save</button>
+		    <button class="cancel-btn btn" (click)="resetNPC()">Cancel</button>
+		</div>
+	    </div>
+            <div class="npc-gm" *ngIf="!editing" >
+		<div class="gm-notes">
+
+		    <p>{{npc.GMNotes}}</p>
+		</div>
+		<div class="save-npc">
+		    <button class="save-btn btn" (click)="startEdit()" >Edit</button>
+		</div>
 	    </div>
 	</div>
-    
-</div>
+	</modal-window>
+	</div>
+	

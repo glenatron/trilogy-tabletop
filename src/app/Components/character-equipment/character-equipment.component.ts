@@ -45,6 +45,7 @@ export class CharacterEquipmentComponent implements OnInit {
 
     public clearAddForm() {
         this.editEquipment = this.resetEditEquipment();
+        this.addFormOpen = false;
     }
 
     public showAddForm() {

@@ -4,12 +4,13 @@
     <counter [counter]="armourSet!.uses.toStore()" (updated)="armourUsed($event)" (value)="updateArmourValue($event)" ></counter> 
     <button *ngIf="armourSet!.needsRepair()" (click)="repair()" >Repair</button>
     <button *ngIf="isBroken()" (click)="reduceQuality()" >Reduce Quality</button>
+    <button (click)="remove()">Remove</button>
     </span>
     <span class="notes" >
 	{{armourSet!.notes}}
     </span>
 </div>
-<div class="armour-missing" *ngIf="armourUnset" >
+<div class="armour-missing" *ngIf="armourUnset && !editing" >
     <button class="btn add-armour" (click)="showEdit()">Add Armour</button>
 </div>
 <div class="add-armour equipment-form-container" *ngIf="editing" >
@@ -24,9 +25,9 @@
 	    Quality
 	</label>
 	<select name="armour_quality" id="armour-quality" [(ngModel)]="armourSet!.currentQuality">
-	    <option value="EquipmentQuality.Basic" >Basic</option>
-	    <option value="EquipmentQuality.Serviceable" >Serviceable</option>
-	    <option value="EquipmentQuality.Masterful" >Masterful</option>
+	    <option value="{{EquipmentQualityName.Basic}}" >Basic</option>
+	    <option value="{{EquipmentQualityName.Serviceable}}" >Serviceable</option>
+	    <option value="{{EquipmentQualityName.Masterful}}" >Masterful</option>
 	</select>
     </div>
     <div class="equipment-form" >

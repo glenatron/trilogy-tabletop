@@ -31,6 +31,7 @@ import { SafeHtmlPipe } from './Services/safe-html.pipe';
 import { FocusContainerComponent } from './Components/focus-container/focus-container.component';
 import { FocusListSetComponent } from './Components/focus-list-set/focus-list-set.component';
 import { ModalWindowComponent } from './Components/modal-window/modal-window.component';
+import { TwoWayCounterComponent } from './Components/two-way-counter/two-way-counter.component';
 
 @NgModule({
     declarations: [
@@ -62,6 +63,7 @@ import { ModalWindowComponent } from './Components/modal-window/modal-window.com
         FocusContainerComponent,
         FocusListSetComponent,
         ModalWindowComponent,
+        TwoWayCounterComponent
     ],
     imports: [
         BrowserModule,
