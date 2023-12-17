@@ -13,6 +13,7 @@
 				       *ngIf="locationListOpen"
 				       (showLocation)="showLocation($event)"
 				       (newLocation)="showLocation($event)"
+				       (createScene)="newScene($event)"
 			></location-list>
 		    </focus-container>
 		    <focus-container [title]="'NPCs'">
@@ -21,8 +22,11 @@
 		    </focus-list-set>
 		</div>
 		<div class="column-centre" >
-		    <div class="current-scene" *ngIf="currentScene" >
-
+		    <div class="create-scene" *ngIf="showSceneForm" >
+			<scene-creator [location]="sceneCreateLocation" [initiatingPlayer]="sceneCreatePlayer" ></scene-creator>
+		    </div>
+		    <div class="current-scene" *ngIf="showScene" >
+			<scene [gmView]="true"></scene>
 		    </div>
 		</div>
 		<div class="column-right" >

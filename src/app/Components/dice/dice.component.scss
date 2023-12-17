@@ -60,6 +60,7 @@ ul.modifier {
     height: 1em;
     padding-right: 2em;
     align-items: center;
+    padding-left: 0;
 }
 ul.modifier li.modifier-literal {
     display: flex;
@@ -91,6 +92,9 @@ li.disadvantage {
 li.highlight {
     background-color: var(--very-dark-leather);
     color: white;
+}
+li.roll-button button {
+    margin-top: 25%;
 }
 div.results {
     color: var(--pale-leather);

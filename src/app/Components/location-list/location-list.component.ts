@@ -15,6 +15,8 @@ export class LocationListComponent implements OnInit {
 
     @Output() newLocation: EventEmitter<Location> = new EventEmitter<Location>();
 
+    @Output() createScene: EventEmitter<Location> = new EventEmitter<Location>();
+
     public liveLocations = new Subject<Array<Location>>();
 
     public currentLocation = "";
@@ -49,7 +51,7 @@ export class LocationListComponent implements OnInit {
     }
 
     public addToScene(location: Location): void {
-        //todo
+        this.createScene.emit(location);
     }
 
     public openLocation(location: Location): void {

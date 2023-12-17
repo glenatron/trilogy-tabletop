@@ -3,6 +3,8 @@ import { BehaviorSubject } from 'rxjs';
 import { TrilogyGameService } from '../../Services/trilogy-game.service';
 import { Location, ILocation } from '../../../../../../trilogy-core/src/GM/Location';
 import { Game } from '../../../../../../trilogy-core/src/Game';
+import { Player, IPlayer } from '../../../../../../trilogy-core/src/Player';
+import { Scene } from '../../../../../../trilogy-core/src/GM/Scene';
 import { ICharacterRoll } from '../../../../../../trilogy-core/src/Character/DicePool';
 
 @Component({
@@ -20,7 +22,9 @@ export class GmViewComponent implements OnInit {
 
     public openLocation: Location | null = null;
 
-    public currentScene: string | null = null;
+    public sceneCreatePlayer: Player | null = null;
+
+    public sceneCreateLocation: Location | null = null;
 
     public diceRoll = new BehaviorSubject<ICharacterRoll | null>(null);
 
@@ -29,6 +33,10 @@ export class GmViewComponent implements OnInit {
     public playerId = '';
 
     public showLocationModal = false;
+
+    public showScene = false;
+
+    public showSceneForm = false;
 
     constructor(public gameService: TrilogyGameService) {
         this.game = new Game(null);
@@ -42,10 +50,17 @@ export class GmViewComponent implements OnInit {
                 }
             }
         });
+        this.gameService.currentScene.subscribe(x => {
+            if (x && x.open) {
+                this.showSceneForm = false;
+                this.showScene = true;
+            } else {
+                this.showScene = false;
+            }
+        });
         this.gameService.rollTrigger.subscribe(x => {
             this.diceRoll.next(x);
         });
-
     }
 
     ngOnInit(): void {
@@ -73,6 +88,14 @@ export class GmViewComponent implements OnInit {
 
     public notifyRoll(roll: ICharacterRoll): void {
         this.gameService.rollNotification(this.playerId, roll);
+    }
+
+    public newScene(location: Location): void {
+        if (this.game!.currentSession()!.currentScene() == null) {
+            this.sceneCreateLocation = location;
+            this.sceneCreatePlayer = this.gameService.getCurrentPlayer();
+            this.showSceneForm = true;
+        }
     }
 
 }

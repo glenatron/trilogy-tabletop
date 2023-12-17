@@ -11,6 +11,10 @@
 		<input type="text" id="npc-name" name="npc_name" [(ngModel)]="npc.name" />
 	    </h2>
 	</div>
+	<div class="npc-summary-without" *ngIf="showSummary">
+	    <p>Look: {{npc.appearance}}</p>
+	    <p>{{npc.description}}</p>
+	</div>
 	<div class="npc-sheet-content" *ngIf="open" >
 	    <div class="npc-player"  *ngIf="!editing">
 		<div class="appearance">
@@ -37,12 +41,12 @@
 		<label for="npc-description">Description</label>
 		    <textarea id="npc-description" name="npc_description" class="npc-description description-field" [(ngModel)]="npc.description"></textarea>
 		</p>
-		<p class="one-line-attribute-container">
+		<p class="one-line-attribute-container" *ngIf="gmView" >
 		    <label for="need-line" >Need: </label>
 		    <input type="text" class="one-line-text" [(ngModel)]="npc.need" />
-
 		</p>
 	    </div>
+	    <div *ngIf="gmView" >
 	    <div class="npc-gm" >
 		<div class="stress-track" >
 		    <counter [counter]="npc.resilience.toStore()" (updated)="updateResilience($event)" (value)="updateResilienceValue($event)" ></counter> 
@@ -52,7 +56,7 @@
 		    <label for="show-players">Visible to players</label>
 		</div>
 	    </div>
-	    <div class="npc-gm" *ngIf="editing">
+	    <div class="npc-gm" *ngIf="editing" >
 		<div class="gm-notes">
 		    <label for="gm-notes">GM Notes</label>
 		    <textarea id="gm-notes" class="gm-notes-field" [(ngModel)]="npc.GMNotes" ></textarea>
@@ -71,6 +75,7 @@
 		<div class="save-npc">
 		    <button class="save-btn btn" (click)="startEdit()" >Edit</button>
 		</div>
+	    </div>
 	    </div>
 	</div>
 	</modal-window>

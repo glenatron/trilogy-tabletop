@@ -7,6 +7,7 @@ import { AppComponent } from './Components/app.component';
 import { GmViewComponent } from './Components/gm-view/gm-view.component';
 import { PlayerViewComponent } from './Components/player-view/player-view.component';
 import { SceneComponent } from './Components/scene/scene.component';
+import { SceneCreatorComponent } from './Components/scene-creator/scene-creator.component';
 import { NpcComponent } from './Components/npc/npc.component';
 import { DiceComponent } from './Components/dice/dice.component';
 import { CharacterComponent } from './Components/character/character.component';
@@ -39,6 +40,7 @@ import { TwoWayCounterComponent } from './Components/two-way-counter/two-way-cou
         GmViewComponent,
         PlayerViewComponent,
         SceneComponent,
+        SceneCreatorComponent,
         LocationComponent,
         NpcComponent,
         DiceComponent,

@@ -1,1 +1,32 @@
-<p>scene works!</p>
+<div class="scene" >
+    <h3>{{scene!.name}}</h3>
+    <div class="scene-location" >
+	<h4>{{location.name}}</h4>
+	<p>{{location.description}}</p>
+    </div>
+    
+    <div class="scene-characters">
+	<ul class="characters-present" >
+	    <li *ngFor="let character of characters" >
+		<span class="char-name">{{character.name}}</span>
+		<span class="action-points"  > {{getActionPoints(character.id)}} Action Points</span>
+		<span *ngIf="0 < getActionPoints(character.id)" class="action-point-control" >
+		    <button class="btn" (click)="expendActionPoint(character.id)">Use</button>
+		</span>
+	    </li>
+	</ul>
+	<ul class="npcs-present" >
+	    <li *ngFor="let npc of NPCs" >
+		<npc [id]="npc.id" [showSummary]="true" [gmView]="gmView" ></npc>
+	    </li>
+	    <li *ngIf="createNPC">
+		<npc [gmView]="true" (created)="npcCreated($event)"></npc>
+	    </li>
+	    <li *ngIf="gmView && !createNPC">
+		<button class="btn" (click)="newNPC()">Create new</button>
+	    </li>
+	</ul>
+
+	<div><button class="btn" (click)="endScene()">End Scene</button></div>
+    </div>
+</div>

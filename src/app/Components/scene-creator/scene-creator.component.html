@@ -1,0 +1,64 @@
+<div class="scene" >
+    <h3>{{sceneTitle}}</h3>
+    <div class="scene-location" >
+	{{location!.name}}
+    </div>
+    <div class="scene-name inline-form" >
+	<label for="scene-title-input" >Title: </label> <input type="text" [(ngModel)]="sceneTitle" />
+    </div>
+	<h4>Characters</h4>
+	<div class="character-edit">
+	    <ul class="character-edit-list left">
+		<li class="edit-list-title">Available characters</li>
+		<li *ngFor="let character of allCharacters()"
+		    (click)="addCharacter(character.id)" 
+		    class="character-name" >
+		    {{character.name}}
+		</li>
+	    </ul>
+	    <ul class="character-edit-list right">
+		<li class="edit-list-title">Characters in scene</li>
+		<li *ngFor="let character of characters"
+		    (click)="removeCharacter(character.id)"
+		    class="character-name">
+		    {{character.name}}
+		</li>
+	    </ul>
+	</div>
+	<h4>NPCs</h4>
+	<div class="character-edit">
+	    <ul class="character-edit-list left">
+		<li class="edit-list-title">Available NPCs</li>
+		<li *ngFor="let npc of allNPCs()"
+		    (click)="addNPC(npc.id)" 
+		    class="character-name">
+		    {{npc.name}}
+		</li>
+	    </ul>
+	    <ul class="character-edit-list right">
+		<li class="edit-list-title">NPCs in scene</li>
+		<li *ngFor="let npc of NPCs"
+		    (click)="removeNPC(npc.id)"
+		    class="character-name">
+		    {{npc.name}}
+		</li>
+	    </ul>
+	</div>
+	<h4>Initiating Player</h4>
+	<div class="inline-form">
+	    <label for="initiating-player">Who initiated the scene?</label>
+	    <select id="initiating-player" class="select-container" (change)="playerChanged($event)">
+		<option id="gm">GM</option>
+		<option *ngFor="let character of characters" value="{{character.id}}" >
+		    {{character.name}} 
+		</option>
+	    </select>
+	</div>
+	<div class="inline-form" *ngIf="playerInitiated">
+	    <label for="initiated-by-player">Open A Scene roll:</label>
+	    <input id="initiated-by-player" type="text" type="number" [(ngModel)]="rollResult">
+	</div>
+	<div><button class="btn" (click)="cancelCreation()">Cancel</button> <button class="btn" (click)="createScene()" *ngIf="createReady" >Create scene</button></div>
+	
+
+</div>

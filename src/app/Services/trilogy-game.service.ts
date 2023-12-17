@@ -5,6 +5,7 @@ import { DicePool, ICharacterRoll } from '../../../../../trilogy-core/src/Charac
 import { NPC, INPC } from '../../../../../trilogy-core/src/GM/NPC'
 import { Location } from '../../../../../trilogy-core/src/GM/Location';
 import { Player, IPlayer } from '../../../../../trilogy-core/src/Player';
+import { ActionPoint, Scene } from '../../../../../trilogy-core/src/GM/Scene';
 import { TrilogyCharacter } from '../../../../../trilogy-core/src/Character/TrilogyCharacter';
 import { MessageType, IChat } from '../../../../../trilogy-core/src/Chat';
 
@@ -27,9 +28,14 @@ export class TrilogyGameService {
 
     public chat = new Subject<Array<IChat>>();
 
+    public currentScene = new BehaviorSubject<Scene | null>(null);
+
+    private activeScene: Scene | null = null;
+
+    private currentPlayerId: string = "";
+
     constructor() {
     }
-
 
     public loadGame(gm: IGame) {
         this.gameInPlay = new Game(gm);
@@ -41,6 +47,7 @@ export class TrilogyGameService {
 
     public createGame(name: string, gmName: string) {
         const gm = new Player({ id: '', name: gmName, activeCharacterId: '', characters: [], isGM: true });
+        this.currentPlayerId = gm.id;
         const format = {
             id: '',
             name: name,
@@ -127,6 +134,13 @@ export class TrilogyGameService {
         throw "Cannot get a player by Id from an empty game.";
     }
 
+    public getCurrentPlayer(): Player | null {
+        if (this.gameInPlay) {
+            return this.gameInPlay.players.find(x => x.id == this.currentPlayerId) ?? null;
+        }
+        return null;
+    }
+
     public findPlayerFromInvite(inviteCode: string): Player | null {
         var result = null;
         if (this.gameInPlay) {
@@ -170,11 +184,44 @@ export class TrilogyGameService {
                 }
             } else {
 
-                this.gameInPlay!.characters.push(newCharacter);
+                this.gameInPlay!.addCharacter(playerId, newCharacter);
             }
         } else {
             throw "Cannot add a character until a game has been created";
 
+        }
+    }
+
+    public createScene(scene: Scene) {
+        if (this.gameInPlay) {
+            const session = this.gameInPlay!.currentSession();
+            if (this.activeScene) {
+                throw "Cannot create a new scene without closing the existing one.";
+            }
+            scene.open = true;
+            session.scenes.push(scene);
+            this.activeScene = scene;
+            this.currentScene.next(this.activeScene);
+            this.notify(this.getPlayer(scene.initiatingPlayerId).name, "Started a new scene: " + scene.name, MessageType.System);
+        }
+    }
+
+    public endScene(actionPoints: Array<ActionPoint>) {
+        if (this.activeScene && this.gameInPlay) {
+            for (let ch of this.gameInPlay.getCharacters()) {
+                let idx = actionPoints.findIndex(x => x.characterId == ch.id);
+                if (0 <= idx) {
+                    if (0 < actionPoints[idx].expended) {
+                        if (actionPoints[idx].points == actionPoints[idx].expended) {
+                            ch.xp.increment();
+                        }
+                    }
+                }
+            }
+            this.gameInPlay.currentSession().closeScene();
+            this.notify(this.getPlayer(this.activeScene.initiatingPlayerId).name, "Scene ended: " + this.activeScene.name, MessageType.System);
+            this.activeScene = null;
+            this.currentScene.next(null);
         }
     }
 
